@@ -1,0 +1,9 @@
+{
+  "name": "qr-tool-deploy",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Website quản lý + công cụ tạo/quét mã QR tự lưu trữ (không phụ thuộc CDN ngoài)",
+  "dependencies": {
+    "qrcode": "1.5.3"
+  }
+}

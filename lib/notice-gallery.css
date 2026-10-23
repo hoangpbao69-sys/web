@@ -1,0 +1,238 @@
+/* =========================================================
+   notice-gallery.css — KHUNG ẢNH THÔNG BÁO CHUNG (trang chủ)
+   ---------------------------------------------------------
+   Thay cho dải ảnh nhỏ 92px cuộn ngang trước đây. Bản mới:
+     - Ảnh to hẳn, tự co theo bề ngang màn hình VÀ theo loại thiết bị
+       (class ui-phone / ui-tablet do lib/mobile-ui.js gắn vào <html>).
+     - Nhiều ảnh thì tự lướt qua sau mỗi 4,5 giây; có nút mũi tên trái/phải
+       bo tròn, viền mảnh; có chấm tròn chỉ vị trí; vuốt được trên điện thoại.
+     - Bấm vào ảnh để phóng to toàn màn hình.
+   ========================================================= */
+
+.notice-gallery {
+  --ng-h: clamp(280px, 34vw, 440px);   /* laptop / desktop */
+  position: relative;
+  margin-top: 14px;
+  border-radius: 18px;
+  overflow: hidden;
+  background:
+    linear-gradient(160deg, rgba(20, 28, 54, .06), rgba(20, 28, 54, .13)),
+    repeating-linear-gradient(45deg, rgba(0, 0, 0, .025) 0 10px, transparent 10px 20px);
+  border: 1px solid rgba(20, 28, 54, .1);
+  box-shadow: 0 10px 28px -16px rgba(20, 28, 54, .55);
+  touch-action: pan-y;
+}
+
+/* Kích thước theo loại thiết bị (ưu tiên class do mobile-ui.js gắn) */
+html.ui-tablet .notice-gallery { --ng-h: clamp(250px, 44vw, 420px); }
+html.ui-phone  .notice-gallery { --ng-h: clamp(200px, 60vw, 330px); }
+/* Dự phòng khi mobile-ui.js chưa chạy: bám theo bề ngang màn hình */
+@media (max-width: 1024px) { .notice-gallery { --ng-h: clamp(250px, 44vw, 420px); } }
+@media (max-width: 640px)  { .notice-gallery { --ng-h: clamp(200px, 60vw, 330px); } }
+/* Màn hình thấp (điện thoại nằm ngang) thì ưu tiên chiều cao màn hình */
+@media (max-height: 520px) { .notice-gallery { --ng-h: min(62vh, 300px); } }
+
+.ng-viewport {
+  position: relative;
+  width: 100%;
+  height: var(--ng-h);
+  overflow: hidden;
+}
+.ng-track {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  transition: transform .45s cubic-bezier(.22, 1, .36, 1);
+  will-change: transform;
+}
+.ng-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+/* Nền mờ lấy từ chính ảnh -> ảnh dọc/ngang đều đầy khung mà không bị cắt */
+.ng-slide .ng-blur {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(26px) saturate(135%) brightness(.82);
+  transform: scale(1.14);
+  opacity: .55;
+}
+.notice-gallery .ng-img {
+  position: relative;
+  max-width: 100% !important;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  cursor: zoom-in;
+  border-radius: 6px;
+}
+
+/* ---------- Nút lướt trái / phải ---------- */
+.ng-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, .78);
+  background: rgba(16, 22, 42, .42);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3;
+  padding: 0;
+  box-shadow: 0 6px 18px -8px rgba(0, 0, 0, .7);
+  transition: background .18s ease, transform .18s ease, opacity .18s ease;
+}
+.ng-nav:hover { background: rgba(16, 22, 42, .7); transform: translateY(-50%) scale(1.07); }
+.ng-nav:active { transform: translateY(-50%) scale(.95); }
+.ng-prev { left: 10px; }
+.ng-next { right: 10px; }
+
+/* ---------- Chấm tròn chỉ vị trí ---------- */
+.ng-dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  z-index: 3;
+}
+.ng-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .85);
+  background: rgba(255, 255, 255, .28);
+  cursor: pointer;
+  transition: width .25s ease, background .25s ease;
+}
+.ng-dot.on { width: 22px; background: #fff; }
+
+/* ---------- Số thứ tự ảnh ---------- */
+.ng-count {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  z-index: 3;
+  background: rgba(16, 22, 42, .55);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .35);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+/* ---------- Ghi chú dưới ảnh ---------- */
+.ng-caption {
+  padding: 9px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #4a4460;
+  background: rgba(255, 255, 255, .75);
+  border-top: 1px solid rgba(20, 28, 54, .08);
+  text-align: center;
+  min-height: 0;
+}
+.ng-caption:empty { display: none; }
+
+/* Một ảnh thì bỏ hết nút điều hướng */
+.notice-gallery[data-count="1"] .ng-nav,
+.notice-gallery[data-count="1"] .ng-dots,
+.notice-gallery[data-count="1"] .ng-count { display: none; }
+
+/* Điện thoại: nút nhỏ lại một chút cho khỏi che ảnh */
+html.ui-phone .ng-nav { width: 38px; height: 38px; font-size: 18px; }
+@media (max-width: 640px) { .ng-nav { width: 38px; height: 38px; font-size: 18px; } }
+
+/* ---------------------------------------------------------
+   XEM ẢNH TOÀN MÀN HÌNH
+--------------------------------------------------------- */
+.ng-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(6, 9, 20, .93);
+  padding: 22px;
+}
+.ng-lightbox.on { display: flex; }
+.ng-lightbox img {
+  max-width: 96vw;
+  max-height: 84vh;
+  object-fit: contain;
+  border-radius: 10px;
+  box-shadow: 0 24px 60px -18px rgba(0, 0, 0, .9);
+}
+.ng-lb-cap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 22px;
+  text-align: center;
+  color: rgba(255, 255, 255, .88);
+  font-size: 14px;
+  padding: 0 24px;
+}
+.ng-lb-close,
+.ng-lb-nav {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, .7);
+  background: rgba(255, 255, 255, .12);
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+.ng-lb-close { top: 18px; right: 18px; font-size: 20px; }
+.ng-lb-nav { top: 50%; transform: translateY(-50%); }
+.ng-lb-prev { left: 16px; }
+.ng-lb-next { right: 16px; }
+.ng-lightbox[data-count="1"] .ng-lb-nav { display: none; }
+
+/* ---------------------------------------------------------
+   HOÀ HỢP VỚI lib/mobile-ui.css
+   Bên đó ép MỌI nút (button) cao tối thiểu 44px. Các nút của khung ảnh là
+   nút tròn/chấm nhỏ nên phải trừ ra, nếu không chấm tròn sẽ bị kéo cao 44px
+   làm vỡ hàng chấm và méo nút mũi tên.
+--------------------------------------------------------- */
+html.ui-mobile .ng-nav,
+html.ui-mobile .ng-dot,
+html.ui-mobile .ng-lb-nav,
+html.ui-mobile .ng-lb-close { min-height: 0 !important; }
+html.ui-mobile .ng-dot { height: 8px !important; }
+/* Vùng bấm thật của chấm tròn vẫn đủ rộng để ngón tay chạm trúng */
+.ng-dot { position: relative; }
+.ng-dot::after { content: ""; position: absolute; inset: -12px -6px; }

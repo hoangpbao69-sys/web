@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>📋 Sổ Theo Dõi - Thư Viện Bài Soạn</title>
+<!-- THEME "CLAUDE" (thử nghiệm, theo DESIGN.md) - áp NGAY trước khi CSS/ảnh
+     nạp xong để tránh nháy giao diện gốc rồi mới đổi màu. Dùng chung key
+     localStorage với trang chủ (index.html) nên chọn 1 lần là đồng bộ cả 2
+     trang. Chưa từng bấm nút 🎨 thì giữ nguyên giao diện gốc như cũ. -->
+<script>
+(function(){
+  try{
+    if(localStorage.getItem('gb_ui_theme') === 'claude') document.documentElement.setAttribute('data-theme','claude');
+  }catch(e){}
+})();
+</script>
+<!-- UI thích ứng thiết bị + spinner dùng chung (laptop giữ nguyên giao diện) -->
+<link rel="stylesheet" href="lib/mobile-ui.css">
+<script src="lib/mobile-ui.js"></script>
+
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,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">
+<link rel="icon" type="image/png" sizes="16x16" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADAUlEQVR42nVTSUxTURS99/W39Je2tBQobaEKDoEoCo6RRKNGdurGaNxpYowxxoXGhSs/jcaFxhhNTBwWstFI47Ax0eCiDsEJGQSt0FKK2glKP3bm9/++5wYMATmrm9xzbk5uzgFYAoIgkP/NS4IxhgAAL7xvbM9HPM1zwjmxJ9jf3PWj1z6fCwDALTzkDQTJckf5ycHYp4511Vs/AADc6H7W6o/9PpaPJIWFfG6hi1MdV4sUsmJqJnfmmPvaSI2a0OFfwXNmovXbS6ky64gtOtAOgC5ECgCx84+u0I9j4w05qmkLSaLsrHI661Y6vp/YcThGgQG0txPGGCAi4wAABCYQFyL9Ev7mnDQU6oIDg52j4fheq0672/8rlS3o86RExTr33TyyvVxtSLgQva45B4IgEBe66IPPz+sTNHOblWjb1mze+BYlXVe392tDZXklbXAu6+YNeKvWYdthRHN/38SgyFP1g0Zb433Vm9evwX3woKZI0g8llVwhccxcp7asMFj4DawAPWaDMdO0tuZoSkqt6Hz/tbjeVpOUjSVbOIUb77h57yUBRNZUq7+u1mrb4uJ0eGwizoUyolzFG7XWWt2yMruxhtKkdkJMyNl0FGbyad+PsXHleyjK/3viVD7tiyQSTMlMAcd4zi8zqLevBiYXWnLZMIvrakHSVKhXteyBGd6imoxEuQxPYgAABACgxzdMfL9/KvWW6pydkIFg2B96OvyKqgiyD4EAvejuou9G/0w6iMnb29cL6VQ2uqtx9eN/DpqsdVxOpuquoeHWVE7KEUUR0xatmjkz5dFpwkwSiHwyhJOJXKXVbKywm8reH2jeOQQAwM3G8o4GUP9EjB/nmGwe/dTnqbaVjVSRUnuL2VrMc+mqikqTY23DJkN1qemurkAubKNu1SE8VMQFSdQDgIojJHnaffnlVCQhjUXiyq7Wdc5L+88eBgAVIvrma8hchD0eD4eIGURMKkNDGiOvp4USMlBUWH+3NzCNiAFE9AmCQOaXaVEjl1rO7hbV+i8CI3WSZ9kKkAAAAABJRU5ErkJggg==">
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600;700;800&family=Baloo+2:wght@500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+<style>
+:root{
+  --cute-bg:#FAF7FF;--cute-purple:#8B7CF6;--cute-purple-dark:#6C5CE7;--cute-pink:#FF8FAB;--cute-pink-dark:#F45C86;
+  --cute-mint:#5FD9C0;--cute-yellow:#FFC857;--cute-text:#4A4560;--cute-text-soft:#8B87A3;
+  --cute-card:rgba(255,255,255,.78);--cute-shadow:0 10px 28px -8px rgba(139,124,246,.28);--cute-shadow-sm:0 4px 12px -4px rgba(139,124,246,.22);
+}
+/* THEME "CLAUDE ✨" (thêm mới, theo DESIGN.md) - bật/tắt bằng nút 🎨 cạnh
+   nút "Trang chủ", lưu lựa chọn vào localStorage (key "gb_ui_theme", DÙNG
+   CHUNG với trang chủ index.html - chọn 1 lần là đồng bộ ở cả 2 trang).
+   Giữ nguyên font Mali/Baloo 2, chỉ đổi màu sắc/thẻ/bóng đổ + tắt kính mờ,
+   đúng tinh thần "phẳng, màu khối, ít hiệu ứng" của DESIGN.md. */
+html[data-theme="claude"]{
+  --cute-bg:#FAF9F5;--cute-purple:#CC785C;--cute-purple-dark:#A9583E;
+  --cute-pink:#E8A55A;--cute-pink-dark:#C9863B;--cute-mint:#5DB8A6;--cute-yellow:#D4A017;
+  --cute-text:#141413;--cute-text-soft:#6C6A64;--cute-card:#EFE9DE;
+  --cute-shadow:0 4px 14px -6px rgba(20,20,19,.16);--cute-shadow-sm:0 1px 3px rgba(20,20,19,.08);
+}
+html[data-theme="claude"] *{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+html[data-theme="claude"] body{background:var(--cute-bg)!important}
+html[data-theme="claude"] .back-home,
+html[data-theme="claude"] .card,html[data-theme="claude"] .panel,
+html[data-theme="claude"] .list-item,html[data-theme="claude"] .modal-box{
+  box-shadow:var(--cute-shadow-sm)!important;border:1px solid #E6DFD8;
+}
+.theme-toggle-btn{
+  position:fixed;top:16px;left:150px;z-index:80;display:inline-flex;align-items:center;gap:6px;
+  padding:9px 16px;border-radius:999px;border:2px solid var(--cute-purple);background:#fff;
+  color:var(--cute-purple-dark);font-family:'Mali',sans-serif;font-weight:700;font-size:13px;
+  transition:transform .18s ease,background .18s ease,color .18s ease;
+}
+.theme-toggle-btn:hover{background:var(--cute-purple);color:#fff;transform:translateY(-2px)}
+html[data-theme="claude"] .theme-toggle-btn{border-radius:8px}
+@media (max-width:640px){.theme-toggle-btn{position:static;margin:10px auto 0;display:flex;width:max-content}}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{font-family:'Mali',sans-serif;font-weight:500;min-height:100vh;color:var(--cute-text)}
+body{
+  background:
+    radial-gradient(circle at 8% 8%, rgba(139,124,246,.14), transparent 40%),
+    radial-gradient(circle at 92% 18%, rgba(255,143,171,.16), transparent 42%),
+    radial-gradient(circle at 50% 100%, rgba(95,217,192,.14), transparent 45%),
+    var(--cute-bg);
+}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer}
+input,textarea,select{font-family:inherit}
+.hide{display:none!important}
+
+.back-home{position:fixed;top:16px;left:16px;z-index:80;display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:999px;background:var(--cute-card);backdrop-filter:blur(14px);box-shadow:var(--cute-shadow-sm);font-weight:700;font-size:13px;color:var(--cute-purple-dark)}
+
+.wrap{max-width:1100px;margin:0 auto;padding:70px 18px 60px}
+.wrap-narrow{max-width:760px;margin:0 auto}
+
+/* ---------- LANDING: 2 khối ---------- */
+.lb-title{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:clamp(22px,4vw,30px);color:var(--cute-purple-dark);margin-bottom:6px}
+.lb-sub{text-align:center;color:var(--cute-text-soft);font-size:14px;margin-bottom:32px}
+.lb-blocks{display:grid;grid-template-columns:1fr;gap:20px}
+@media(min-width:720px){.lb-blocks{grid-template-columns:1fr 1fr}}
+.lb-block{
+  padding:28px 24px;border-radius:26px;cursor:pointer;text-align:center;
+  background:var(--cute-card);backdrop-filter:blur(16px) saturate(160%);
+  box-shadow:var(--cute-shadow-sm),0 0 0 1px rgba(255,255,255,.55) inset;
+  transition:transform .25s ease,box-shadow .25s ease;
+}
+.lb-block:hover{transform:translateY(-5px);box-shadow:var(--cute-shadow)}
+.lb-block .ico{width:72px;height:72px;border-radius:22px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:34px;color:#fff}
+.lb-block.lead .ico{background:linear-gradient(135deg,var(--cute-purple),var(--cute-purple-dark))}
+.lb-block.mem .ico{background:linear-gradient(135deg,#6ec6ff,#4285f4)}
+.lb-block h3{font-family:'Baloo 2',sans-serif;font-size:18px;margin-bottom:6px}
+.lb-block p{font-size:13px;color:var(--cute-text-soft);line-height:1.5}
+
+.lb-panel-head{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.lb-back-btn{padding:8px 16px;border-radius:999px;background:var(--cute-card);box-shadow:var(--cute-shadow-sm);font-weight:700;font-size:13px;border:none;color:var(--cute-purple-dark)}
+.lb-panel-head h2{font-family:'Baloo 2',sans-serif;font-size:20px;color:var(--cute-purple-dark)}
+
+/* ---------- FORM TẠO/SỬA BẢNG ---------- */
+.lb-card{background:var(--cute-card);backdrop-filter:blur(16px);border-radius:22px;padding:22px;box-shadow:var(--cute-shadow-sm);margin-bottom:20px}
+.lb-field{margin-bottom:14px}
+.lb-field label{display:block;font-size:12.5px;font-weight:700;color:var(--cute-text-soft);margin-bottom:5px}
+.lb-field input[type=text],.lb-field input[type=date],.lb-field textarea{
+  width:100%;padding:10px 14px;border-radius:12px;border:1.5px solid #E4DEFB;background:#fff;font-size:14px;outline:none;transition:border-color .2s
+}
+.lb-field input:focus,.lb-field textarea:focus{border-color:var(--cute-purple)}
+.lb-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:600px){.lb-row{grid-template-columns:1fr}}
+.lb-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:600px){.lb-row3{grid-template-columns:1fr}}
+.lb-color-row{display:flex;align-items:center;gap:10px}
+.lb-color-row input[type=color]{width:44px;height:34px;border:none;border-radius:8px;cursor:pointer;background:none}
+.lb-toggle-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--cute-text);margin:6px 0}
+
+/* rich text toolbar (rút gọn từ Thông báo chung) */
+.rte-wrap{border:1.5px solid #E4DEFB;border-radius:14px;overflow:hidden;background:#fff}
+.rte-toolbar{display:flex;flex-wrap:wrap;gap:4px;padding:6px 8px;background:#F5F2FF;border-bottom:1.5px solid #E4DEFB}
+.rte-toolbar button{padding:5px 9px;border:none;border-radius:8px;background:#fff;font-size:13px;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.rte-toolbar button:hover{background:#EDE8FF}
+.rte-toolbar input[type=color]{width:28px;height:26px;border:none;border-radius:6px;cursor:pointer}
+.rte-editor{min-height:90px;padding:12px 14px;font-size:14px;outline:none;line-height:1.6}
+.rte-editor:empty:before{content:attr(data-placeholder);color:#b3aed6}
+
+/* ---------- BẢNG DANH SÁCH ĐÃ ĐĂNG (thu gọn) ---------- */
+.lb-post-item{border-radius:16px;padding:14px 18px;margin-bottom:12px;cursor:pointer;color:#fff;box-shadow:var(--cute-shadow-sm);position:relative}
+.lb-post-item .row1{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.lb-post-item .ttl{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:15.5px}
+.lb-post-item .meta{font-size:11.5px;opacity:.88;margin-top:3px}
+.lb-tag-latest{display:inline-flex;align-items:center;padding:2px 10px;border-radius:999px;background:rgba(255,255,255,.28);color:#fff;font-size:10.5px;font-weight:800}
+.lb-post-actions{position:absolute;right:14px;top:14px;display:flex;gap:6px}
+.lb-post-actions button{padding:5px 9px;border:none;border-radius:8px;background:rgba(255,255,255,.25);color:#fff;font-size:12px}
+.lb-post-actions button:hover{background:rgba(255,255,255,.4)}
+
+/* ---------- BẢNG THEO DÕI (chi tiết) ---------- */
+.lb-table-meta{font-size:13.5px;margin-bottom:14px;line-height:2;color:var(--cute-text)}
+.lb-table-meta b{color:var(--cute-purple-dark)}
+.lb-table-scroll{overflow-x:auto;border-radius:14px;box-shadow:var(--cute-shadow-sm)}
+table.lb-table{border-collapse:collapse;table-layout:fixed;background:#fff}
+table.lb-table th,table.lb-table td{border:2px solid #6C5CE7;padding:4px 3px;font-size:10.5px;text-align:center;color:#2d2a44}
+table.lb-table th{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:10px;color:#332e55;writing-mode:horizontal-tb;padding:5px 3px;white-space:normal;word-break:break-word;line-height:1.2}
+table.lb-table th:first-child,table.lb-table td.stt{width:28px}
+table.lb-table th:nth-child(2),table.lb-table td.name-cell{width:78px}
+table.lb-table th:last-child:not(.cmt-th),table.lb-table td:last-child:not(.comment-cell){width:26px}
+table.lb-table td.stt{font-weight:700;font-size:11px}
+table.lb-table td.name-cell{font-weight:700;text-align:left;padding-left:5px;writing-mode:horizontal-tb;font-size:10.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+table.lb-table th.cmt-th,table.lb-table td.comment-cell{width:150px;text-align:left;writing-mode:horizontal-tb;font-size:10px}
+table.lb-table input.tally-input{width:100%;text-align:center;border:none;background:transparent;font-size:11px;font-weight:700;color:inherit;outline:none;padding:0}
+table.lb-table textarea.comment-input{width:100%;min-height:38px;border:none;background:transparent;font-size:10px;resize:vertical;outline:none;font-family:'Mali',sans-serif;line-height:1.3}
+table.lb-table .lb-auto-btn{font-size:9px;padding:2px 5px}
+.lb-auto-btn{padding:3px 8px;border:none;border-radius:7px;background:var(--cute-purple);color:#fff;font-size:10.5px;margin-top:4px;cursor:pointer}
+
+.lb-student-toolbar{display:flex;gap:10px;margin:14px 0}
+.lb-btn{padding:10px 18px;border-radius:999px;border:none;font-weight:700;font-size:13.5px;cursor:pointer;transition:transform .18s ease}
+.lb-btn:hover{transform:translateY(-2px)}
+.lb-btn-primary{background:linear-gradient(135deg,var(--cute-purple),var(--cute-purple-dark));color:#fff;box-shadow:var(--cute-shadow-sm)}
+.lb-btn-ghost{background:#fff;color:var(--cute-purple-dark);border:1.5px solid #E4DEFB}
+.lb-btn-danger{background:#FFE3EA;color:var(--cute-pink-dark)}
+
+.lb-readonly-note{margin-bottom:16px;font-size:14px;line-height:1.7}
+.lb-empty{text-align:center;padding:40px 10px;color:var(--cute-text-soft);font-size:14px}
+
+/* ---------- MODAL "Dùng danh sách thành viên từ bảng khác" (mới) ---------- */
+.lb-modal-overlay{position:fixed;inset:0;z-index:3000;background:rgba(20,15,40,.45);display:flex;align-items:center;justify-content:center;padding:20px}
+.lb-modal-box{width:min(480px,94vw);max-height:82vh;overflow-y:auto;background:#fff;border-radius:22px;padding:22px;box-shadow:0 20px 50px -10px rgba(0,0,0,.35)}
+.lb-modal-box h3{font-family:'Baloo 2',sans-serif;color:var(--cute-purple-dark);margin-bottom:14px;font-size:17px}
+.lb-roster-item{padding:12px 14px;border-radius:14px;border:1.5px solid #E4DEFB;margin-bottom:10px;cursor:pointer;transition:background .15s}
+.lb-roster-item:hover{background:#F5F2FF}
+.lb-roster-item .ttl{font-weight:700;font-size:14px;color:var(--cute-text)}
+.lb-roster-item .meta{font-size:11.5px;color:var(--cute-text-soft);margin-top:2px}
+.lb-modal-close{margin-top:6px;width:100%}
+
+/* ---------- CỔNG ĐĂNG NHẬP (giống hệt phong cách trang chủ/thư viện) ---------- */
+.gate-overlay{
+  position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;
+  background:
+    radial-gradient(ellipse at 15% -10%, #16264a 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 110%, #0d1730 0%, transparent 55%),
+    linear-gradient(180deg,#0b1024 0%,#16223f 35%,#274670 65%,#3f6ea5 100%);
+  overflow:hidden;
+}
+.gate-trees{position:absolute;inset:0;pointer-events:none;opacity:.55}
+.gate-trees svg{width:100%;height:100%}
+.gate-box{
+  position:relative;z-index:2;width:min(400px,90vw);padding:30px 30px 26px;border-radius:26px;
+  background:rgba(255,255,255,.14);backdrop-filter:blur(22px) saturate(140%);-webkit-backdrop-filter:blur(22px) saturate(140%);
+  box-shadow:0 20px 60px -12px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.18) inset;
+  animation:gateBoxIn .5s cubic-bezier(.16,1,.3,1);
+}
+@keyframes gateBoxIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.gate-box h2{text-align:center;color:#fff;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:22px;margin-bottom:22px;letter-spacing:.3px}
+.gate-field{position:relative;margin-bottom:20px}
+.gate-field input{
+  width:100%;background:transparent;border:none;border-bottom:1.5px solid rgba(255,255,255,.4);
+  color:#fff;font-family:'Mali',sans-serif;font-size:14.5px;padding:6px 26px 8px 2px;outline:none;transition:border-color .2s ease;
+}
+.gate-field input::placeholder{color:rgba(255,255,255,.55)}
+.gate-field input:focus{border-color:#fff}
+.gate-field .gate-icon{position:absolute;right:2px;top:6px;opacity:.85}
+.gate-remember{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.85);font-size:12.5px;margin:2px 0 20px;cursor:pointer}
+.gate-remember input{width:auto}
+.gate-btn{
+  width:100%;padding:13px;border:none;border-radius:12px;background:#0f1b33;color:#fff;
+  font-family:'Baloo 2',sans-serif;font-weight:700;font-size:15px;letter-spacing:.3px;
+  box-shadow:0 6px 18px -4px rgba(0,0,0,.4);transition:transform .18s ease,background .18s ease;
+}
+.gate-btn:hover{transform:translateY(-2px);background:#16264a}
+.gate-help{text-align:center;margin-top:14px;font-size:11.5px;color:rgba(255,255,255,.45)}
+.gate-err{display:none;background:rgba(244,92,134,.18);color:#ffd7e2;font-size:12.5px;padding:8px 12px;border-radius:10px;margin-bottom:14px;text-align:center}
+</style>
+<link rel="stylesheet" href="lib/auth-ui.css">
+</head>
+<body>
+<!-- ===== Global Loading Spinner (tự thêm) ===== -->
+<div id="global-page-loader" role="status" aria-live="polite" aria-label="Đang tải trang">
+  <div class="gpl-spinner"><span></span></div>
+  <p class="gpl-text">Đang tải...</p>
+</div>
+<style>
+#global-page-loader{position:fixed;inset:0;z-index:999999;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .35s ease,visibility .35s ease}
+#global-page-loader.gpl-hide{opacity:0;visibility:hidden;pointer-events:none}
+.gpl-spinner{width:56px;height:56px;border-radius:50%;border:5px solid #fbd7e4;position:relative}
+.gpl-spinner span{position:absolute;inset:-5px;border-radius:50%;border:5px solid transparent;border-top-color:#ec1561;border-right-color:#ec1561;animation:gpl-spin .8s linear infinite}
+.gpl-text{margin:0;font-family:'Baloo 2','Quicksand','Mali','Segoe UI',sans-serif;font-weight:700;font-size:15px;color:#3f3a4a;letter-spacing:.2px}
+@keyframes gpl-spin{to{transform:rotate(360deg)}}
+html.gpl-loading{overflow:hidden}
+</style>
+<script>
+(function(){
+  document.documentElement.classList.add('gpl-loading');
+  function gplHide(){
+    var el = document.getElementById('global-page-loader');
+    if(!el || el.dataset.hidden) return;
+    el.dataset.hidden = '1';
+    document.documentElement.classList.remove('gpl-loading');
+    el.classList.add('gpl-hide');
+    setTimeout(function(){ el.remove(); }, 400);
+  }
+  function gplSetup(){
+    var gate = document.getElementById('gateOverlay');
+    if(gate){
+      // Trang nhật ký có cổng kiểm tra đăng nhập chạy bất đồng bộ sau khi
+      // tải trang. Đợi cổng quyết định xong (hiện lại form đăng nhập, hoặc
+      // tự ẩn vì đã đăng nhập sẵn) rồi mới ẩn spinner, để người dùng thấy
+      // spinner xoay tròn thay vì thấy khung đăng nhập chớp lên rồi mới vào
+      // được web. Không đụng vào logic đăng nhập, chỉ theo dõi thời điểm
+      // gateOverlay đổi trạng thái hiển thị.
+      var gplMo = new MutationObserver(function(){
+        if(gate.style.display === 'flex' || gate.style.display === 'none'){
+          gplHide();
+        }
+      });
+      gplMo.observe(gate, {attributes:true, attributeFilter:['style']});
+      setTimeout(gplHide, 8000); // an toàn: tự ẩn sau tối đa 8 giây phòng khi có lỗi
+    } else {
+      window.addEventListener('load', gplHide);
+      setTimeout(gplHide, 6000); // an toàn: tự ẩn sau tối đa 6 giây phòng khi sự kiện load không kích hoạt
+    }
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', gplSetup);
+  } else {
+    gplSetup();
+  }
+})();
+</script>
+
+<div class="gate-overlay" id="gateOverlay">
+  <div class="gate-trees">
+    <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+      <g fill="#0a1730" opacity="0.9">
+        <polygon points="60,700 100,520 140,700"/>
+        <polygon points="150,700 200,470 250,700"/>
+        <polygon points="950,700 1000,480 1050,700"/>
+        <polygon points="1060,700 1110,510 1160,700"/>
+      </g>
+      <g fill="#13234a" opacity="0.75">
+        <polygon points="0,700 60,560 130,700"/>
+        <polygon points="1080,700 1150,540 1200,700"/>
+        <polygon points="300,700 340,600 380,700"/>
+        <polygon points="820,700 860,590 900,700"/>
+      </g>
+    </svg>
+  </div>
+  <div class="gate-box">
+    <h2>Đăng nhập</h2>
+    <div class="gate-err" id="gateErr"></div>
+    <div class="gate-field">
+      <input type="text" id="gateNameInput" placeholder="Tên đăng nhập" onkeydown="if(event.key==='Enter'){event.preventDefault();document.getElementById('gateCodeInput').focus();}">
+      <svg class="gate-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+    </div>
+    <div class="gate-field">
+      <input type="text" id="gateCodeInput" placeholder="Mã định danh" onkeydown="if(event.key==='Enter')submitGate()">
+      <svg class="gate-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg>
+    </div>
+    <label class="gate-remember"><input type="checkbox" id="gateRememberMe"> Ghi nhớ đăng nhập</label>
+    <button class="gate-btn" onclick="submitGate()">Đăng nhập</button>
+    <div class="gate-help">Liên hệ Gia Bảo nếu gặp vấn đề</div>
+  </div>
+</div>
+
+<a class="back-home" href="index.html">🏡 Trang chủ</a>
+<button class="theme-toggle-btn" onclick="toggleGbUiTheme()" title="Đổi giao diện thử nghiệm theo DESIGN.md">🎨 <span id="themeToggleLabel">Giao diện Claude</span></button>
+
+<div class="wrap">
+
+  <!-- ============ LANDING: 2 KHỐI ============ -->
+  <div id="landingView">
+   <div class="wrap-narrow">
+    <h1 class="lb-title">📋 Sổ Theo Dõi</h1>
+    <p class="lb-sub">Theo dõi nề nếp học tập hàng tuần của tổ</p>
+    <div class="lb-blocks">
+      <div class="lb-block lead" onclick="showLeaderView()">
+        <div class="ico">👑</div>
+        <h3>Tổ trưởng / Tổ phó</h3>
+        <p>Tạo bảng theo dõi nề nếp tuần, chấm điểm từng thành viên rồi đăng lên cho cả tổ xem</p>
+      </div>
+      <div class="lb-block mem" onclick="showMemberView()">
+        <div class="ico">👥</div>
+        <h3>Thành viên tổ</h3>
+        <p>Xem lại các bảng theo dõi nề nếp mà tổ trưởng/tổ phó đã đăng</p>
+      </div>
+    </div>
+   </div>
+  </div>
+
+  <!-- ============ KHỐI 1: TỔ TRƯỞNG/TỔ PHÓ ============ -->
+  <div id="leaderView" class="hide">
+    <div class="lb-panel-head">
+      <button class="lb-back-btn" onclick="backToLanding()">← Quay lại</button>
+      <h2>👑 Tổ trưởng / Tổ phó</h2>
+    </div>
+
+    <div id="leaderListSection">
+      <button class="lb-btn lb-btn-primary" style="margin-bottom:18px" onclick="openEditor(null)">➕ Tạo bảng mới</button>
+      <div id="leaderPostList"></div>
+    </div>
+
+    <div id="editorSection" class="hide">
+      <div class="lb-card">
+        <div class="lb-field"><label>Tiêu đề bảng</label><input type="text" id="lbTitle" placeholder="VD: Sổ theo dõi nề nếp tuần 1"></div>
+        <div class="lb-row3">
+          <div class="lb-field"><label>Ngày đăng</label><input type="date" id="lbLogDate"></div>
+          <div class="lb-field"><label>Tổ trưởng</label><input type="text" id="lbToTruong" placeholder="Tên tổ trưởng"></div>
+          <div class="lb-field"><label>Tổ</label><input type="text" id="lbToSo" placeholder="VD: Tổ 3"></div>
+        </div>
+        <div class="lb-row3">
+          <div class="lb-field"><label>Tuần thứ</label><input type="text" id="lbTuanThu" placeholder="VD: 1"></div>
+          <div class="lb-field"><label>Từ ngày</label><input type="date" id="lbFromDate"></div>
+          <div class="lb-field"><label>Đến ngày</label><input type="date" id="lbToDate"></div>
+        </div>
+        <div class="lb-row">
+          <div class="lb-field">
+            <label>Màu nền tiêu đề</label>
+            <div class="lb-color-row"><input type="color" id="lbHeaderColor" value="#8B7CF6"><span style="font-size:12.5px;color:var(--cute-text-soft)">Hiện khi bảng thu gọn</span></div>
+          </div>
+          <div class="lb-field">
+            <label>&nbsp;</label>
+            <label class="lb-toggle-row"><input type="checkbox" id="lbIsLatest"> Gắn nhãn "Mới nhất"</label>
+          </div>
+        </div>
+        <div class="lb-field">
+          <label>Ghi chú thêm (tuỳ chọn)</label>
+          <div class="rte-wrap">
+            <div class="rte-toolbar" id="lbRteToolbar">
+              <button type="button" data-cmd="bold"><b>B</b></button>
+              <button type="button" data-cmd="italic"><i>I</i></button>
+              <button type="button" data-cmd="underline"><u>U</u></button>
+              <span title="Màu chữ">🎨<input type="color" id="lbColorPicker" onchange="lbApplyColor(this.value)" value="#2b2b40"></span>
+              <span title="Highlight">🖍️<input type="color" id="lbHighlightPicker" onchange="lbApplyHighlight(this.value)" value="#fff176"></span>
+              <button type="button" onclick="lbApplyHighlight('transparent')">🚫</button>
+              <button type="button" data-cmd="justifyLeft">⇤</button>
+              <button type="button" data-cmd="justifyCenter">↔</button>
+              <button type="button" data-cmd="justifyRight">⇥</button>
+              <button type="button" onclick="lbClearFormat()">⌫</button>
+            </div>
+            <div class="rte-editor" id="lbNoteEditor" contenteditable="true" data-placeholder="Ghi chú thêm cho cả tổ (không bắt buộc)..."></div>
+          </div>
+        </div>
+
+        <div class="lb-student-toolbar" style="flex-wrap:wrap">
+          <button class="lb-btn lb-btn-ghost" onclick="addStudentRow()">➕ Thêm thành viên</button>
+          <button class="lb-btn lb-btn-ghost" onclick="openRosterPicker()">📋 Dùng danh sách tuần khác</button>
+          <button class="lb-btn lb-btn-ghost" onclick="autoCommentAll()">🪄 Tự động nhận xét tất cả</button>
+          <button class="lb-btn lb-btn-ghost" onclick="exportLogbookExcel()">📥 Xuất Excel</button>
+        </div>
+
+        <div class="lb-table-scroll">
+          <table class="lb-table" id="lbEditTable"></table>
+        </div>
+
+        <div style="display:flex;gap:10px;margin-top:20px">
+          <button class="lb-btn lb-btn-primary" onclick="saveLogbook()">📣 Đăng bảng</button>
+          <button class="lb-btn lb-btn-ghost" onclick="cancelEditor()">Huỷ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MODAL: Dùng danh sách thành viên từ 1 bảng đã đăng khác ============
+       Chỉ lấy TÊN + THỨ TỰ thành viên của bảng được chọn, KHÔNG lấy số gạch vi phạm
+       và KHÔNG lấy nhận xét - đúng yêu cầu "chỉ tên thành viên và thứ tự thành viên". -->
+  <div class="lb-modal-overlay hide" id="rosterPickerOverlay">
+    <div class="lb-modal-box">
+      <h3>📋 Dùng danh sách thành viên từ bảng khác</h3>
+      <div id="rosterPickerList"><div class="lb-empty">⏳ Đang tải...</div></div>
+      <button class="lb-btn lb-btn-ghost lb-modal-close" onclick="closeRosterPicker()">Đóng</button>
+    </div>
+  </div>
+
+  <!-- ============ KHỐI 2: THÀNH VIÊN TỔ ============ -->
+  <div id="memberView" class="hide">
+    <div class="lb-panel-head">
+      <button class="lb-back-btn" onclick="backToLanding()">← Quay lại</button>
+      <h2>📋 Sổ theo dõi</h2>
+    </div>
+    <div id="memberPostList"></div>
+    <div id="memberTableView" class="hide">
+      <button class="lb-back-btn" style="margin-bottom:16px" onclick="closeMemberTable()">← Danh sách bảng</button>
+      <div class="lb-card">
+        <h2 id="memTitle" style="font-family:'Baloo 2',sans-serif;color:var(--cute-purple-dark);margin-bottom:10px"></h2>
+        <div class="lb-readonly-note" id="memNote"></div>
+        <div class="lb-table-meta" id="memMeta"></div>
+        <div class="lb-table-scroll"><table class="lb-table" id="memTable"></table></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const SUPABASE_URL = 'https://vuunoamkaokfvxpaftno.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ1dW5vYW1rYW9rZnZ4cGFmdG5vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ1NTkxODcsImV4cCI6MjEwMDEzNTE4N30.7ie-uNPswMdQL6Amab-QMjvx3i55NWXoWgq81yProiE';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* ============ ĐĂNG NHẬP - dùng chung sessionStorage với trang chủ/thư viện
+   (Tên đăng nhập + Mã định danh). Nếu đã đăng nhập ở trang chủ/thư viện
+   trong cùng tab thì vào thẳng, không cần nhập lại. Nếu chưa, hiện cổng
+   đăng nhập riêng ngay tại đây (giống hệt trang chủ/thư viện, có "Ghi nhớ
+   đăng nhập"). ============ */
+let currentUserName = '';
+let currentIdentityCode = '';
+let _mySessionToken = '';
+try{
+  currentUserName = sessionStorage.getItem('gb_username') || '';
+  currentIdentityCode = sessionStorage.getItem('gb_identity_code') || '';
+  _mySessionToken = sessionStorage.getItem('gb_session_token') || '';
+}catch(e){}
+const SESSION_LOCK_TIMEOUT_MS = 40000; // quá 40s không "nhấp nháy" coi như phiên đã rớt
+let _sessionLockHeartbeatTimer = null;
+let _myIp = null;
+let _myLocation = null;
+async function getMyIp(){
+  if(_myIp) return _myIp;
+  try{
+    const res = await fetch('https://api.ipify.org?format=json');
+    const data = await res.json();
+    _myIp = data.ip || null;
+  }catch(e){ console.warn('Không lấy được IP:', e); }
+  return _myIp;
+}
+async function getMyLocation(){
+  if(_myLocation) return _myLocation;
+  try{
+    const res = await fetch('https://ipapi.co/json/');
+    const data = await res.json();
+    if(data && !data.error){
+      _myLocation = { city: data.city || null, region: data.region || null, country: data.country_name || null };
+    }
+  }catch(e){ console.warn('Không lấy được vị trí đăng nhập (bỏ qua):', e); }
+  return _myLocation;
+}
+async function buildDeviceInfo(){
+  const ua = navigator.userAgent || '';
+  let deviceType = 'Máy tính (Desktop/Laptop)';
+  if(/iPad|Android(?!.*Mobile)|Tablet/i.test(ua)) deviceType = 'Máy tính bảng';
+  else if(/Mobi|iPhone|iPod|Android.*Mobile|Windows Phone/i.test(ua)) deviceType = 'Điện thoại di động';
+  let os = 'Không rõ';
+  const winMatch = ua.match(/Windows NT (\d+\.\d+)/);
+  if(winMatch){
+    const winVersions = { '10.0':'Windows 10/11', '6.3':'Windows 8.1', '6.2':'Windows 8', '6.1':'Windows 7' };
+    os = winVersions[winMatch[1]] || ('Windows (NT ' + winMatch[1] + ')');
+  } else if(/Mac OS X (\d+[._]\d+)/.test(ua)){
+    const m = ua.match(/Mac OS X (\d+[._]\d+(?:[._]\d+)?)/);
+    os = 'macOS ' + (m ? m[1].replace(/_/g,'.') : '');
+  } else if(/Android (\d+(\.\d+)?)/.test(ua)){
+    const m = ua.match(/Android (\d+(\.\d+)?)/);
+    os = 'Android ' + (m ? m[1] : '');
+  } else if(/iPhone OS (\d+[._]\d+)/.test(ua) || /CPU OS (\d+[._]\d+)/.test(ua)){
+    const m = ua.match(/(?:iPhone OS|CPU OS) (\d+[._]\d+)/);
+    os = 'iOS ' + (m ? m[1].replace(/_/g,'.') : '');
+  } else if(/Linux/.test(ua)){ os = 'Linux'; }
+  let browser = 'Không rõ';
+  if(/Edg\//.test(ua)) browser = 'Microsoft Edge';
+  else if(/OPR\//.test(ua)) browser = 'Opera';
+  else if(/Chrome\//.test(ua) && !/Chromium/.test(ua)) browser = 'Chrome';
+  else if(/Firefox\//.test(ua)) browser = 'Firefox';
+  else if(/Safari\//.test(ua) && !/Chrome/.test(ua)) browser = 'Safari';
+  const info = {
+    deviceType: deviceType, os: os, browser: browser,
+    cores: navigator.hardwareConcurrency || null, mem: navigator.deviceMemory || null,
+    screen: (screen.width && screen.height) ? (screen.width+'×'+screen.height) : null,
+    brand: null, ua: ua
+  };
+  if(os.indexOf('macOS') === 0) info.brand = 'Apple (macOS)';
+  else if(os.indexOf('iOS') === 0) info.brand = 'Apple';
+  try{
+    if(navigator.userAgentData && navigator.userAgentData.getHighEntropyValues){
+      const uaData = await navigator.userAgentData.getHighEntropyValues(['platformVersion','model']);
+      if(navigator.userAgentData.platform === 'Windows' && uaData.platformVersion){
+        const majorVer = parseInt(uaData.platformVersion.split('.')[0], 10);
+        info.os = majorVer >= 13 ? 'Windows 11' : 'Windows 10';
+      }
+      if(uaData.model) info.brand = uaData.model;
+    }
+  }catch(e){}
+  return info;
+}
+/* Ghi lại lịch sử đăng nhập - THÊM MỚI: trước đây trang "Sổ theo dõi" này
+   không hề ghi lịch sử đăng nhập (chỉ library.html mới có), nên đăng nhập
+   từ đây không hiện trong mục "🕓 Lịch sử đăng nhập" bên manage.html. */
+/* ============ THEME "CLAUDE" (thử nghiệm, theo DESIGN.md) ============ */
+function updateThemeToggleLabel(){
+  const lbl = document.getElementById('themeToggleLabel');
+  if(!lbl) return;
+  const on = document.documentElement.getAttribute('data-theme') === 'claude';
+  lbl.textContent = on ? 'Giao diện gốc' : 'Giao diện Claude';
+}
+function toggleGbUiTheme(){
+  const on = document.documentElement.getAttribute('data-theme') === 'claude';
+  if(on){
+    document.documentElement.removeAttribute('data-theme');
+    try{ localStorage.setItem('gb_ui_theme', 'default'); }catch(e){}
+  } else {
+    document.documentElement.setAttribute('data-theme', 'claude');
+    try{ localStorage.setItem('gb_ui_theme', 'claude'); }catch(e){}
+  }
+  updateThemeToggleLabel();
+}
+document.addEventListener('DOMContentLoaded', updateThemeToggleLabel);
+async function logLoginHistory(){
+  const id = 'login_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
+  const loggedInAt = new Date().toISOString();
+  let ip = null, location = null, deviceInfo = null;
+  try{
+    ip = await getMyIp();
+    location = await getMyLocation();
+    deviceInfo = await buildDeviceInfo();
+  }catch(e){ console.warn('Không lấy được đủ IP/vị trí/thiết bị (bỏ qua, vẫn ghi tên+giờ):', e); }
+  const fullRow = {
+    id: id, user_name: currentUserName, ip: ip || null,
+    location: location ? JSON.stringify(location) : null,
+    logged_in_at: loggedInAt,
+    device_info: deviceInfo ? JSON.stringify(deviceInfo) : null
+  };
+  try{
+    const { error } = await supabaseClient.from('login_history').insert(fullRow);
+    if(!error) return;
+    if(/relation .* does not exist|42P01/i.test((error.message||'')+(error.code||''))){
+      console.warn('Chưa tạo bảng login_history trên Supabase - chạy setup-database.sql để bật tính năng lịch sử đăng nhập.');
+      return;
+    }
+    if(/column .* does not exist|42703|could not find/i.test((error.message||'')+(error.code||''))){
+      console.warn('Bảng login_history thiếu cột location/device_info - ghi tạm bản rút gọn.');
+      const { error: err2 } = await supabaseClient.from('login_history').insert({
+        id: id, user_name: currentUserName, ip: ip || null, logged_in_at: loggedInAt
+      });
+      if(err2) console.warn('Không ghi được cả bản rút gọn lịch sử đăng nhập:', err2);
+      return;
+    }
+    console.warn('Không ghi được lịch sử đăng nhập:', error);
+  }catch(e){ console.warn(e); }
+}
+function getDeviceFingerprint(){
+  try{
+    const s = [navigator.userAgent, navigator.language, screen.width+'x'+screen.height,
+      Intl.DateTimeFormat().resolvedOptions().timeZone].join('|');
+    let hash = 0;
+    for(let i = 0; i < s.length; i++){ hash = ((hash << 5) - hash + s.charCodeAt(i)) | 0; }
+    return 'fp' + Math.abs(hash).toString(36);
+  }catch(e){ return 'fp0'; }
+}
+/* ---------------------------------------------------------------------------
+   BẢN VÁ 16/09 — SỬA LỖI "GHI NHỚ ĐĂNG NHẬP" KHÔNG CÒN TÁC DỤNG
+
+   LỖI CŨ: khoá ghi nhớ được ghép từ ĐỊA CHỈ IP CÔNG CỘNG + vân tay trình duyệt
+        'student_' + ip + '_fp...'
+   Địa chỉ IP của nhà mạng đổi liên tục: khởi động lại modem, đổi Wi-Fi, dùng
+   4G/5G, ra quán... là IP khác -> khoá khác -> không tìm thấy bản ghi nào ->
+   vẫn phải nhập lại Tên + Mã định danh dù đã tích "Ghi nhớ đăng nhập".
+   Nặng hơn: nếu api.ipify.org bị chặn/chậm thì khoá thành '..._noip_...'
+   (lệch tiếp), và màn hình đăng nhập phải ĐỢI request lấy IP xong mới hiện.
+
+   CÁCH SỬA: sinh một MÃ THIẾT BỊ ngẫu nhiên và lưu trong localStorage của
+   chính trình duyệt đó. localStorage sống qua việc tắt hẳn trình duyệt, đổi
+   mạng, đổi IP -> ghi nhớ đăng nhập mới thật sự bền, lại không cần chờ mạng.
+   IP vẫn được lưu kèm để bạn xem, nhưng KHÔNG còn tham gia vào khoá nữa.
+
+   TƯƠNG THÍCH NGƯỢC: nếu chưa có bản ghi theo mã thiết bị, hệ thống thử tìm
+   theo khoá kiểu cũ (IP + vân tay) đúng một lần; tìm thấy thì chuyển sang
+   khoá mới ngay, nên người đang được ghi nhớ không bị văng ra.
+   --------------------------------------------------------------------------- */
+let _gbDeviceId = null;
+function getDeviceId(){
+  if(_gbDeviceId) return _gbDeviceId;
+  try{ _gbDeviceId = localStorage.getItem('gb_device_id') || ''; }catch(e){ _gbDeviceId = ''; }
+  if(!_gbDeviceId){
+    _gbDeviceId = 'd' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+    try{ localStorage.setItem('gb_device_id', _gbDeviceId); }catch(e){}
+  }
+  return _gbDeviceId;
+}
+function getRememberKeySync(kind){ return kind + '_' + getDeviceId(); }
+/* Giữ nguyên tên/kiểu async của hàm cũ để mọi chỗ gọi cũ vẫn chạy đúng. */
+async function getRememberKey(kind){ return getRememberKeySync(kind); }
+async function getLegacyRememberKey(kind){
+  try{
+    const ip = await getMyIp();
+    return kind + '_' + (ip || 'noip').replace(/[^a-zA-Z0-9]/g, '') + '_' + getDeviceFingerprint();
+  }catch(e){ return null; }
+}
+async function saveRememberedLogin(kind, identityCode, displayName){
+  const key = getRememberKeySync(kind);
+  try{
+    await supabaseClient.from('remembered_logins').upsert({
+      id: key, kind: kind, ip: _myIp || null, fingerprint: getDeviceFingerprint(),
+      identity_code: identityCode, display_name: displayName || null,
+      last_seen: new Date().toISOString()
+    });
+  }catch(e){ console.warn('Không lưu được ghi nhớ đăng nhập:', e); return; }
+  // Lấy IP ở nền rồi ghi bổ sung - KHÔNG bắt người dùng chờ request này.
+  try{
+    getMyIp().then(function(ip){
+      if(!ip) return;
+      return supabaseClient.from('remembered_logins').update({ ip: ip }).eq('id', key);
+    }).catch(function(){});
+  }catch(e){}
+}
+async function loadRememberedLogin(kind){
+  try{
+    const { data, error } = await supabaseClient.from('remembered_logins')
+      .select('*').eq('id', getRememberKeySync(kind)).maybeSingle();
+    if(!error && data) return data;
+  }catch(e){}
+  // Chưa có bản ghi theo mã thiết bị -> thử khoá kiểu cũ rồi chuyển đổi.
+  try{
+    const legacy = await getLegacyRememberKey(kind);
+    if(!legacy) return null;
+    const { data, error } = await supabaseClient.from('remembered_logins')
+      .select('*').eq('id', legacy).maybeSingle();
+    if(error || !data) return null;
+    saveRememberedLogin(kind, data.identity_code, data.display_name);
+    return data;
+  }catch(e){ return null; }
+}
+/* Xoá "Ghi nhớ đăng nhập" của đúng thiết bị này (cả khoá mới lẫn khoá cũ).
+   Gọi khi đăng nhập mà KHÔNG tích ô ghi nhớ, và khi bấm "Đăng xuất". */
+async function clearRememberedLogin(kind){
+  try{
+    await supabaseClient.from('remembered_logins').delete().eq('id', getRememberKeySync(kind));
+  }catch(e){ console.warn('Không xoá được ghi nhớ đăng nhập:', e); }
+  try{
+    const legacy = await getLegacyRememberKey(kind);
+    if(legacy) await supabaseClient.from('remembered_logins').delete().eq('id', legacy);
+  }catch(e){}
+}
+async function checkIfIdentityRevoked(){
+  if(!currentUserName || !currentIdentityCode) return false;
+  try{
+    const { data, error } = await supabaseClient
+      .from('user_identities').select('*')
+      .eq('display_name', currentUserName).eq('identity_code', currentIdentityCode)
+      .eq('revoked', false).maybeSingle();
+    if(error) return false;
+    return !data;
+  }catch(e){ return false; }
+}
+async function acquireOrVerifySession(identityCode, displayName){
+  const token = _mySessionToken || (Date.now() + '_' + Math.random().toString(36).slice(2, 10));
+  try{
+    const { data, error } = await supabaseClient.from('active_sessions').select('*').eq('identity_code', identityCode).maybeSingle();
+    if(error && /relation .* does not exist|42P01/i.test((error.message||'')+(error.code||''))) return { ok: true };
+    if(data){
+      const lastSeenMs = data.last_seen ? new Date(data.last_seen).getTime() : 0;
+      const isStale = !data.last_seen || (Date.now() - lastSeenMs) > SESSION_LOCK_TIMEOUT_MS;
+      const isMine = data.session_token && data.session_token === token;
+      if(!isStale && !isMine) return { ok: false };
+    }
+    const { error: upErr } = await supabaseClient.from('active_sessions').upsert({
+      identity_code: identityCode, session_token: token, display_name: displayName, last_seen: new Date().toISOString()
+    });
+    if(upErr) return { ok: true };
+    _mySessionToken = token;
+    sessionStorage.setItem('gb_session_token', token);
+    return { ok: true };
+  }catch(e){ return { ok: true }; }
+}
+/* =========================================================================
+   GIỮ KHOÁ PHIÊN ĐĂNG NHẬP DUY NHẤT (sửa lỗi 1 tài khoản vào được 2 nơi)
+   Giống trang chủ/thư viện: cứ 20 giây gia hạn last_seen cho session_token
+   của mình; nếu không còn dòng nào khớp nghĩa là nơi khác đã chiếm khoá ->
+   tự thoát tại chỗ.
+   ========================================================================= */
+function startSessionLockHeartbeat(){
+  clearInterval(_sessionLockHeartbeatTimer);
+  _sessionLockHeartbeatTimer = setInterval(renewSessionLock, 20000);
+}
+function stopSessionLockHeartbeat(){
+  clearInterval(_sessionLockHeartbeatTimer);
+  _sessionLockHeartbeatTimer = null;
+}
+async function renewSessionLock(){
+  if(!currentIdentityCode || !_mySessionToken) return;
+  try{
+    const { data, error } = await supabaseClient
+      .from('active_sessions')
+      .update({ last_seen: new Date().toISOString(), display_name: currentUserName })
+      .eq('identity_code', currentIdentityCode)
+      .eq('session_token', _mySessionToken)
+      .select();
+    if(error) return;
+    if(!data || !data.length) forceKickBySession();
+  }catch(e){}
+}
+function forceKickBySession(){
+  stopSessionLockHeartbeat();
+  clearInterval(_lbOnlineHeartbeatTimer);
+  try{ if(currentUserName) supabaseClient.from('online_users').delete().eq('user_name', currentUserName); }catch(e){}
+  sessionStorage.removeItem('gb_username');
+  sessionStorage.removeItem('gb_identity_code');
+  sessionStorage.removeItem('gb_session_token');
+  currentUserName = ''; currentIdentityCode = ''; _mySessionToken = '';
+  document.getElementById('gateOverlay').style.display = 'flex';
+  showGateError('⚠️ Tài khoản của bạn vừa được đăng nhập ở nơi khác nên phiên này đã kết thúc');
+}
+
+function showGateError(msg){
+  const el = document.getElementById('gateErr');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+async function submitGate(){
+  const name = (document.getElementById('gateNameInput').value || '').trim();
+  const code = (document.getElementById('gateCodeInput').value || '').trim();
+  document.getElementById('gateErr').style.display = 'none';
+  if(!name || !code){ showGateError('⚠️ Vui lòng nhập đầy đủ Tên đăng nhập và Mã định danh'); return; }
+  const btn = document.querySelector('.gate-btn');
+  if(btn){ btn.disabled = true; btn.style.opacity = '0.7'; }
+  let identityOk = false;
+  let matchedIdentity = null;
+  try{
+    const { data, error } = await supabaseClient
+      .from('user_identities').select('*')
+      .eq('display_name', name).eq('identity_code', code).eq('revoked', false).maybeSingle();
+    if(error && /relation .* does not exist|42P01/i.test((error.message||'')+(error.code||''))){
+      showGateError('⚠️ Hệ thống định danh chưa được thiết lập. Vui lòng liên hệ Gia Bảo.');
+      if(btn){ btn.disabled = false; btn.style.opacity = '1'; }
+      return;
+    }
+    matchedIdentity = data || null;
+    if(!matchedIdentity){
+      try{
+        const { data: data2 } = await supabaseClient
+          .from('user_identities').select('*')
+          .eq('display_name', name).eq('backup_code', code).eq('revoked', false).maybeSingle();
+        matchedIdentity = data2 || null;
+      }catch(e2){ /* cột backup_code có thể chưa tồn tại - bỏ qua */ }
+    }
+    identityOk = !!matchedIdentity;
+  }catch(e){
+    showGateError('⚠️ Không thể kiểm tra, vui lòng thử lại');
+    if(btn){ btn.disabled = false; btn.style.opacity = '1'; }
+    return;
+  }
+  if(btn){ btn.disabled = false; btn.style.opacity = '1'; }
+  if(!identityOk){ showGateError('⚠️ Tên hoặc Mã định danh không đúng (hoặc đã bị thu hồi)'); return; }
+  const canonicalCode = (matchedIdentity.identity_code || code).substring(0,60);
+  const sessionCheck = await acquireOrVerifySession(canonicalCode, name.substring(0,30));
+  if(!sessionCheck.ok){ showGateError('⚠️ Tài khoản đang được đăng nhập ở nơi khác, vui lòng thử lại sau'); return; }
+  currentUserName = name.substring(0, 30);
+  currentIdentityCode = canonicalCode;
+  sessionStorage.setItem('gb_username', currentUserName);
+  sessionStorage.setItem('gb_identity_code', currentIdentityCode);
+  if(document.getElementById('gateRememberMe').checked){
+    saveRememberedLogin('student', currentIdentityCode, currentUserName);
+  } else {
+    clearRememberedLogin('student');
+  }
+  document.getElementById('gateOverlay').style.display = 'none';
+  startSessionLockHeartbeat();
+  startLogbookOnlineHeartbeat();
+  logLoginHistory();
+}
+/* ============ ONLINE HEARTBEAT (đồng bộ với trang chủ/thư viện) - báo cho
+   web quản lý biết đang có người ở trang "Sổ theo dõi" này. ============ */
+let _lbOnlineHeartbeatTimer = null;
+async function pingLogbookOnline(){
+  if(!currentUserName) return;
+  try{
+    const { error } = await supabaseClient.from('online_users').upsert({
+      user_name: currentUserName, last_seen: new Date().toISOString(), current_page: 'Sổ theo dõi'
+    });
+    if(error && /column .* does not exist|42703/i.test((error.message||'')+(error.code||''))){
+      await supabaseClient.from('online_users').upsert({ user_name: currentUserName, last_seen: new Date().toISOString() });
+    }
+  }catch(e){}
+}
+function startLogbookOnlineHeartbeat(){
+  pingLogbookOnline();
+  clearInterval(_lbOnlineHeartbeatTimer);
+  _lbOnlineHeartbeatTimer = setInterval(pingLogbookOnline, 20000);
+}
+window.addEventListener('beforeunload', function(){
+  if(!currentUserName) return;
+  try{
+    supabaseClient.from('online_users').delete().eq('user_name', currentUserName);
+    if(currentIdentityCode && _mySessionToken){
+      supabaseClient.from('active_sessions').delete().eq('identity_code', currentIdentityCode).eq('session_token', _mySessionToken);
+    }
+  }catch(e){}
+});
+async function checkPageGate(){
+  if(currentUserName && currentIdentityCode){
+    const revoked = await checkIfIdentityRevoked();
+    if(revoked){
+      sessionStorage.removeItem('gb_username'); sessionStorage.removeItem('gb_identity_code');
+      currentUserName = ''; currentIdentityCode = '';
+      document.getElementById('gateOverlay').style.display = 'flex';
+      showGateError('⚠️ Mã định danh đã bị thu hồi, vui lòng đăng nhập lại');
+      return;
+    }
+    // Kiểm tra khoá phiên trước khi cho vào: nếu nơi khác đang giữ khoá và
+    // vẫn còn "nhấp nháy" thì không cho dùng tiếp ở máy này.
+    const sessionCheck = await acquireOrVerifySession(currentIdentityCode, currentUserName);
+    if(!sessionCheck.ok){
+      sessionStorage.removeItem('gb_username');
+      sessionStorage.removeItem('gb_identity_code');
+      sessionStorage.removeItem('gb_session_token');
+      currentUserName = ''; currentIdentityCode = ''; _mySessionToken = '';
+      document.getElementById('gateOverlay').style.display = 'flex';
+      showGateError('⚠️ Tài khoản đang được đăng nhập ở nơi khác, vui lòng thử lại sau');
+      return;
+    }
+    document.getElementById('gateOverlay').style.display = 'none';
+    startSessionLockHeartbeat();
+    startLogbookOnlineHeartbeat();
+    return;
+  }
+  const remembered = await loadRememberedLogin('student');
+  if(remembered && remembered.identity_code && remembered.display_name){
+    try{
+      const { data } = await supabaseClient
+        .from('user_identities').select('*')
+        .eq('display_name', remembered.display_name).eq('identity_code', remembered.identity_code)
+        .eq('revoked', false).maybeSingle();
+      if(data){
+        currentUserName = remembered.display_name;
+        currentIdentityCode = remembered.identity_code;
+        sessionStorage.setItem('gb_username', currentUserName);
+        sessionStorage.setItem('gb_identity_code', currentIdentityCode);
+        checkPageGate();
+        return;
+      }
+    }catch(e){}
+  }
+  document.getElementById('gateOverlay').style.display = 'flex';
+  setTimeout(function(){ document.getElementById('gateNameInput').focus(); }, 100);
+}
+checkPageGate();
+
+function escapeHtml(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+    return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+  });
+}
+
+/* ============ DANH MỤC CỘT THEO DÕI (cố định, giống mẫu sổ giấy) + màu pastel riêng từng cột
+   + mẫu câu nhận xét tự động theo 3 mức độ (1-2 / 3-4 / 5+ gạch) ============ */
+const CATEGORIES = [
+  { key:'vang_hoc',    label:'Vắng học',                                   short:'Vắng học',    type:'neg', color:'#FFE1E6', verbs:['thỉnh thoảng vắng học','vắng học khá nhiều buổi','vắng học rất nhiều buổi, cần chú ý'] },
+  { key:'di_tre',      label:'Đi học trễ',                                 short:'Đi trễ',      type:'neg', color:'#FFE9D6', verbs:['thỉnh thoảng đi học trễ','đi học trễ khá nhiều lần','đi học trễ rất nhiều lần'] },
+  { key:'bai_tap',     label:'Bài tập về nhà / Chuẩn bị bài theo yêu cầu', short:'BT về nhà',   type:'neg', color:'#FFF3D6', verbs:['thỉnh thoảng chưa làm bài tập về nhà','chưa làm bài tập về nhà khá nhiều lần','thường xuyên không làm bài tập về nhà'] },
+  { key:'dung_cu',     label:'Dụng cụ học tập, sách vở',                   short:'Dụng cụ HT',  type:'neg', color:'#F5F6D6', verbs:['thỉnh thoảng thiếu dụng cụ học tập, sách vở','thiếu dụng cụ học tập, sách vở khá nhiều lần','thường xuyên thiếu dụng cụ học tập, sách vở'] },
+  { key:'chep_bai',    label:'Chép bài',                                   short:'Chép bài',    type:'neg', color:'#E7F5D6', verbs:['thỉnh thoảng chưa chép bài đầy đủ','chưa chép bài đầy đủ khá nhiều lần','thường xuyên không chép bài đầy đủ'] },
+  { key:'dong_phuc',   label:'Đồng phục',                                  short:'Đồng phục',   type:'neg', color:'#D9F2E3', verbs:['thỉnh thoảng chưa đúng đồng phục','chưa đúng đồng phục khá nhiều lần','thường xuyên vi phạm đồng phục'] },
+  { key:'noi_chuyen',  label:'Nói chuyện',                                 short:'Nói chuyện',  type:'neg', color:'#D6F0F2', verbs:['thỉnh thoảng nói chuyện riêng','nói chuyện khá nhiều trong giờ học','nói chuyện rất nhiều, cần nhắc nhở'] },
+  { key:'ra_khoi_lop', label:'Ra khỏi lớp giờ đổi tiết',                   short:'Ra khỏi lớp', type:'neg', color:'#D6E6F5', verbs:['thỉnh thoảng ra khỏi lớp giờ đổi tiết','ra khỏi lớp giờ đổi tiết khá nhiều lần','thường xuyên ra khỏi lớp giờ đổi tiết'] },
+  { key:'an_qua_vat',  label:'Ăn quà vặt, nói tục, xả rác',                short:'Quà vặt/rác', type:'neg', color:'#E1D6F5', verbs:['thỉnh thoảng ăn quà vặt, nói tục, xả rác','ăn quà vặt, nói tục, xả rác khá nhiều lần','thường xuyên ăn quà vặt, nói tục, xả rác'] },
+  { key:'dien_thoai',  label:'Sử dụng điện thoại',                         short:'Điện thoại',  type:'neg', color:'#F5D6EC', verbs:['thỉnh thoảng dùng điện thoại trong giờ','dùng điện thoại trong giờ khá nhiều lần','thường xuyên dùng điện thoại trong giờ học'] },
+  { key:'truc_nhat',   label:'Trực nhật, biểu dương lao động',             short:'Trực nhật',   type:'pos', color:'#D6F5DE', verbs:['có tham gia trực nhật, lao động tốt','tích cực trực nhật, lao động','rất tích cực trực nhật, lao động, xứng đáng được khen'] },
+  { key:'phat_bieu',   label:'Phát biểu xây dựng bài',                     short:'Phát biểu',   type:'pos', color:'#D6EFFF', verbs:['có phát biểu xây dựng bài','phát biểu xây dựng bài khá tích cực','phát biểu xây dựng bài rất tích cực, cần được khen'] }
+];
+
+function tierFor(n){ if(!n || n <= 0) return -1; if(n <= 2) return 0; if(n <= 4) return 1; return 2; }
+
+/* Tự sinh câu nhận xét chung cho 1 thành viên, dựa trên số gạch ở TẤT CẢ
+   các mục (không chỉ riêng Nói chuyện/Phát biểu). Vi phạm (neg) và điểm
+   cộng (pos) được liệt kê riêng, nối với nhau bằng "nhưng" nếu có cả 2. */
+function buildAutoComment(name, tallies){
+  const negs = [], poss = [];
+  CATEGORIES.forEach(function(cat){
+    const n = (tallies && tallies[cat.key]) || 0;
+    const tier = tierFor(n);
+    if(tier === -1) return;
+    const phrase = cat.verbs[tier];
+    if(cat.type === 'neg') negs.push(phrase); else poss.push(phrase);
+  });
+  if(!negs.length && !poss.length) return (name || 'Bạn') + ' thực hiện tốt nội quy, không vi phạm mục nào trong tuần.';
+  let s = (name || 'Bạn') + ', ';
+  if(negs.length) s += negs.join(', ');
+  if(negs.length && poss.length) s += ', nhưng ';
+  if(poss.length) s += poss.join(', ');
+  s += '.';
+  return s;
+}
+
+/* ============ RICH TEXT TOOLBAR RÚT GỌN (ghi chú thêm) ============ */
+let _lbActiveEditor = null;
+function lbInitEditor(){
+  const editor = document.getElementById('lbNoteEditor');
+  const toolbar = document.getElementById('lbRteToolbar');
+  toolbar.querySelectorAll('button[data-cmd]').forEach(function(btn){
+    btn.addEventListener('mousedown', function(e){ e.preventDefault(); });
+    btn.addEventListener('click', function(){
+      editor.focus();
+      document.execCommand(btn.getAttribute('data-cmd'), false, null);
+    });
+  });
+  editor.addEventListener('blur', function(){
+    const sel = window.getSelection();
+    if(sel && sel.rangeCount > 0){
+      const r = sel.getRangeAt(0);
+      if(editor.contains(r.commonAncestorContainer)) editor._lastRange = r.cloneRange();
+    }
+  });
+}
+function lbFocusEditor(){
+  const editor = document.getElementById('lbNoteEditor');
+  editor.focus();
+  const sel = window.getSelection();
+  const within = sel && sel.rangeCount > 0 && editor.contains(sel.getRangeAt(0).commonAncestorContainer);
+  if(!within && editor._lastRange){ try{ sel.removeAllRanges(); sel.addRange(editor._lastRange); }catch(e){} }
+}
+function lbApplyColor(color){ lbFocusEditor(); document.execCommand('foreColor', false, color); }
+function lbApplyHighlight(color){
+  lbFocusEditor();
+  try{ document.execCommand('styleWithCSS', false, true); }catch(e){}
+  const ok = document.execCommand('hiliteColor', false, color);
+  if(!ok){ try{ document.execCommand('backColor', false, color); }catch(e){} }
+}
+function lbClearFormat(){ lbFocusEditor(); document.execCommand('removeFormat', false, null); }
+lbInitEditor();
+
+/* ============ ĐIỀU HƯỚNG GIỮA CÁC KHỐI ============ */
+function backToLanding(){
+  document.getElementById('landingView').classList.remove('hide');
+  document.getElementById('leaderView').classList.add('hide');
+  document.getElementById('memberView').classList.add('hide');
+}
+/* Kiểm tra quyền truy cập Khối 1 (Tổ trưởng/Tổ phó) dựa trên đúng cặp
+   Tên đăng nhập + Mã định danh hiện tại (cột can_access_logbook_leader
+   trong user_identities, bật/tắt ở manage.html mục "Mã định danh"). */
+async function checkLogbookLeaderAccess(){
+  try{
+    const { data, error } = await supabaseClient
+      .from('user_identities').select('can_access_logbook_leader')
+      .eq('display_name', currentUserName).eq('identity_code', currentIdentityCode)
+      .eq('revoked', false).maybeSingle();
+    if(error || !data) return false;
+    return !!data.can_access_logbook_leader;
+  }catch(e){ return false; }
+}
+async function showLeaderView(){
+  const allowed = await checkLogbookLeaderAccess();
+  if(!allowed){
+    alert('⚠️ Liên hệ Gia Bảo để cấp quyền truy cập trang web này!');
+    return;
+  }
+  document.getElementById('landingView').classList.add('hide');
+  document.getElementById('leaderView').classList.remove('hide');
+  document.getElementById('editorSection').classList.add('hide');
+  document.getElementById('leaderListSection').classList.remove('hide');
+  loadLeaderPosts();
+}
+function showMemberView(){
+  document.getElementById('landingView').classList.add('hide');
+  document.getElementById('memberView').classList.remove('hide');
+  document.getElementById('memberTableView').classList.add('hide');
+  document.getElementById('memberPostList').classList.remove('hide');
+  loadMemberPosts();
+}
+
+/* ============ TRẠNG THÁI BẢNG ĐANG SOẠN ============ */
+let _lbStudents = []; // [{ name, tallies:{key:n}, comment }]
+let _lbEditingId = null;
+
+function addStudentRow(name){
+  _lbStudents.push({ name: name || '', tallies: {}, comment: '' });
+  renderEditTable();
+}
+function removeStudentRow(idx){
+  _lbStudents.splice(idx, 1);
+  renderEditTable();
+}
+/* Đổi chỗ 1 thành viên lên trên (dir=-1) hoặc xuống dưới (dir=1) - sửa lỗi
+   nhập sai thứ tự mà không cần xoá nhập lại. */
+function moveStudentRow(idx, dir){
+  const newIdx = idx + dir;
+  if(newIdx < 0 || newIdx >= _lbStudents.length) return;
+  const tmp = _lbStudents[idx];
+  _lbStudents[idx] = _lbStudents[newIdx];
+  _lbStudents[newIdx] = tmp;
+  renderEditTable();
+}
+function updateStudentField(idx, field, value){
+  _lbStudents[idx][field] = value;
+}
+function updateStudentTally(idx, key, value){
+  const n = Math.max(0, parseInt(value, 10) || 0);
+  _lbStudents[idx].tallies[key] = n;
+}
+function autoCommentOne(idx){
+  const s = _lbStudents[idx];
+  s.comment = buildAutoComment(s.name, s.tallies);
+  renderEditTable();
+}
+function autoCommentAll(){
+  _lbStudents.forEach(function(s){ s.comment = buildAutoComment(s.name, s.tallies); });
+  renderEditTable();
+}
+
+/* ============ XUẤT FILE EXCEL (.xlsx) cho bảng đang soạn ở Khối 1 - giữ
+   nguyên màu pastel từng cột giống trên màn hình (dùng ExcelJS vì thư viện
+   xlsx/SheetJS bản miễn phí KHÔNG hỗ trợ ghi màu ô). ============ */
+function hexToArgb(hex){
+  return 'FF' + String(hex || '#FFFFFF').replace('#', '').toUpperCase();
+}
+async function exportLogbookExcel(){
+  if(typeof ExcelJS === 'undefined'){ alert('Không tải được thư viện xuất Excel, vui lòng thử lại.'); return; }
+  const title = (document.getElementById('lbTitle').value || 'So theo doi').trim();
+  const toTruong = document.getElementById('lbToTruong').value.trim();
+  const toSo = document.getElementById('lbToSo').value.trim();
+  const tuanThu = document.getElementById('lbTuanThu').value.trim();
+  const fromDate = document.getElementById('lbFromDate').value;
+  const toDate = document.getElementById('lbToDate').value;
+
+  const workbook = new ExcelJS.Workbook();
+  const sheet = workbook.addWorksheet('SoTheoDoi');
+
+  sheet.addRow(['BẢNG THEO DÕI NỀ NẾP TUẦN']);
+  sheet.getCell('A1').font = { bold: true, size: 14 };
+  sheet.addRow(['Tiêu đề:', title]);
+  sheet.addRow(['Tổ trưởng:', toTruong, '', 'Tổ:', toSo]);
+  sheet.addRow(['Tuần thứ:', tuanThu, '', 'Từ ngày:', fromDate || '', 'Đến ngày:', toDate || '']);
+  sheet.addRow([]);
+
+  const headerRow = sheet.addRow(['STT', 'Tên học sinh'].concat(CATEGORIES.map(function(c){ return c.label; })).concat(['Nhận xét chung']));
+  headerRow.eachCell(function(cell, colNumber){
+    cell.font = { bold: true };
+    cell.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+    cell.border = { top:{style:'thin'}, left:{style:'thin'}, bottom:{style:'thin'}, right:{style:'thin'} };
+    // Cột 1=STT, 2=Tên, 3..14=12 mục theo dõi (tô màu), 15=Nhận xét
+    const catIdx = colNumber - 3;
+    if(catIdx >= 0 && catIdx < CATEGORIES.length){
+      cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: hexToArgb(CATEGORIES[catIdx].color) } };
+    }
+  });
+
+  _lbStudents.forEach(function(s, idx){
+    const rowValues = [idx + 1, s.name || ''];
+    CATEGORIES.forEach(function(cat){ rowValues.push((s.tallies && s.tallies[cat.key]) || 0); });
+    rowValues.push(s.comment || '');
+    const row = sheet.addRow(rowValues);
+    row.eachCell(function(cell, colNumber){
+      cell.border = { top:{style:'thin'}, left:{style:'thin'}, bottom:{style:'thin'}, right:{style:'thin'} };
+      cell.alignment = { vertical: 'middle', horizontal: colNumber <= 2 ? 'left' : 'center', wrapText: true };
+      const catIdx = colNumber - 3;
+      if(catIdx >= 0 && catIdx < CATEGORIES.length){
+        cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: hexToArgb(CATEGORIES[catIdx].color) } };
+      }
+    });
+  });
+
+  sheet.columns = [{ width: 6 }, { width: 20 }].concat(CATEGORIES.map(function(){ return { width: 14 }; })).concat([{ width: 44 }]);
+
+  const buf = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buf], { type: 'application/octet-stream' });
+  const url = URL.createObjectURL(blob);
+  const safeTitle = title.replace(/[\\/:*?"<>|]/g, '').slice(0, 60) || 'So_theo_doi';
+  const a = document.createElement('a');
+  a.href = url; a.download = safeTitle + '.xlsx';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function renderEditTable(){
+  const table = document.getElementById('lbEditTable');
+  let thead = '<tr><th>STT</th><th>Tên học sinh</th>';
+  CATEGORIES.forEach(function(cat){ thead += '<th style="background:'+cat.color+';width:54px" title="'+escapeHtml(cat.label)+'">'+escapeHtml(cat.short||cat.label)+'</th>'; });
+  thead += '<th class="cmt-th">Nhận xét chung</th><th></th></tr>';
+
+  let rows = '';
+  _lbStudents.forEach(function(s, idx){
+    rows += '<tr>';
+    rows += '<td class="stt">' + (idx + 1) + '</td>';
+    rows += '<td class="name-cell"><input type="text" class="tally-input" style="width:100%;text-align:left" value="' + escapeHtml(s.name) + '" placeholder="Tên..." onchange="updateStudentField(' + idx + ',\'name\',this.value)"></td>';
+    CATEGORIES.forEach(function(cat){
+      const v = s.tallies[cat.key] || 0;
+      rows += '<td style="background:' + cat.color + '"><input type="number" min="0" class="tally-input" value="' + v + '" onchange="updateStudentTally(' + idx + ',\'' + cat.key + '\',this.value)"></td>';
+    });
+    rows += '<td class="comment-cell"><textarea class="comment-input" onchange="updateStudentField(' + idx + ',\'comment\',this.value)">' + escapeHtml(s.comment) + '</textarea><button type="button" class="lb-auto-btn" onclick="autoCommentOne(' + idx + ')">🪄 Tự động</button></td>';
+    rows += '<td style="white-space:nowrap">'
+      + '<button type="button" class="lb-auto-btn"' + (idx === 0 ? ' disabled style="opacity:.35;cursor:not-allowed"' : '') + ' title="Chuyển lên trên" onclick="moveStudentRow(' + idx + ',-1)">↑</button> '
+      + '<button type="button" class="lb-auto-btn"' + (idx === _lbStudents.length - 1 ? ' disabled style="opacity:.35;cursor:not-allowed"' : '') + ' title="Chuyển xuống dưới" onclick="moveStudentRow(' + idx + ',1)">↓</button> '
+      + '<button type="button" class="lb-auto-btn" style="background:#F45C86" onclick="removeStudentRow(' + idx + ')">✕</button>'
+      + '</td>';
+    rows += '</tr>';
+  });
+  table.innerHTML = thead + rows;
+}
+
+function resetEditorForm(){
+  document.getElementById('lbTitle').value = '';
+  document.getElementById('lbLogDate').value = new Date().toISOString().slice(0,10);
+  document.getElementById('lbToTruong').value = currentUserName || '';
+  document.getElementById('lbToSo').value = '';
+  document.getElementById('lbTuanThu').value = '';
+  document.getElementById('lbFromDate').value = '';
+  document.getElementById('lbToDate').value = '';
+  document.getElementById('lbHeaderColor').value = '#8B7CF6';
+  document.getElementById('lbIsLatest').checked = false;
+  document.getElementById('lbNoteEditor').innerHTML = '';
+  _lbStudents = [];
+  _lbEditingId = null;
+  renderEditTable();
+}
+
+function openEditor(id){
+  document.getElementById('leaderListSection').classList.add('hide');
+  document.getElementById('editorSection').classList.remove('hide');
+  if(!id){ resetEditorForm(); return; }
+  loadOneLogbook(id).then(function(data){
+    if(!data){ resetEditorForm(); return; }
+    _lbEditingId = data.id;
+    document.getElementById('lbTitle').value = data.title || '';
+    document.getElementById('lbLogDate').value = data.log_date || '';
+    document.getElementById('lbToTruong').value = data.to_truong || '';
+    document.getElementById('lbToSo').value = data.to_so || '';
+    document.getElementById('lbTuanThu').value = data.tuan_thu || '';
+    document.getElementById('lbFromDate').value = data.from_date || '';
+    document.getElementById('lbToDate').value = data.to_date || '';
+    document.getElementById('lbHeaderColor').value = data.header_color || '#8B7CF6';
+    document.getElementById('lbIsLatest').checked = !!data.is_latest;
+    document.getElementById('lbNoteEditor').innerHTML = data.note_html || '';
+    _lbStudents = Array.isArray(data.students) ? data.students.map(function(s){ return { name: s.name || '', tallies: s.tallies || {}, comment: s.comment || '' }; }) : [];
+    renderEditTable();
+  });
+}
+function cancelEditor(){
+  document.getElementById('editorSection').classList.add('hide');
+  document.getElementById('leaderListSection').classList.remove('hide');
+}
+
+/* =========================================================================
+   "DÙNG DANH SÁCH TUẦN KHÁC" - lấy lại đúng TÊN + THỨ TỰ thành viên từ 1
+   bảng theo dõi đã đăng trước đó (tuần 1, tuần 2...), để không phải gõ tay
+   lại toàn bộ tên mỗi khi tạo bảng mới.
+
+   CHỈ lấy tên + thứ tự, KHÔNG lấy số gạch vi phạm và KHÔNG lấy nhận xét -
+   bảng mới luôn bắt đầu với số gạch = 0 và nhận xét trống cho từng người,
+   đúng yêu cầu ban đầu.
+   ========================================================================= */
+function openRosterPicker(){
+  document.getElementById('rosterPickerOverlay').classList.remove('hide');
+  loadRosterPickerList();
+}
+function closeRosterPicker(){
+  document.getElementById('rosterPickerOverlay').classList.add('hide');
+}
+async function loadRosterPickerList(){
+  const el = document.getElementById('rosterPickerList');
+  el.innerHTML = '<div class="lb-empty">⏳ Đang tải...</div>';
+  try{
+    const { data, error } = await supabaseClient.from('logbooks')
+      .select('id,title,to_so,tuan_thu,log_date,students')
+      .order('log_date', { ascending: false, nullsFirst: false })
+      .order('created_at', { ascending: false });
+    if(error || !data || !data.length){ el.innerHTML = '<div class="lb-empty">🗂️ Chưa có bảng nào để lấy danh sách</div>'; return; }
+    // Bỏ bảng đang sửa dở (nếu có) và bảng chưa có thành viên nào.
+    const usable = data.filter(function(d){ return Array.isArray(d.students) && d.students.length && d.id !== _lbEditingId; });
+    if(!usable.length){ el.innerHTML = '<div class="lb-empty">🗂️ Chưa có bảng nào khác có sẵn danh sách thành viên</div>'; return; }
+    el.innerHTML = usable.map(function(d){
+      const n = d.students.filter(function(s){ return s && (s.name || '').trim(); }).length;
+      return '<div class="lb-roster-item" onclick="applyRosterFromLogbook(\'' + d.id + '\')">'
+        + '<div class="ttl">' + escapeHtml(d.title) + '</div>'
+        + '<div class="meta">' + (d.to_so ? escapeHtml(d.to_so) + ' · ' : '') + (d.tuan_thu ? 'Tuần ' + escapeHtml(d.tuan_thu) + ' · ' : '') + (d.log_date ? escapeHtml(d.log_date) + ' · ' : '') + n + ' thành viên</div>'
+        + '</div>';
+    }).join('');
+  }catch(e){ console.error(e); el.innerHTML = '<div class="lb-empty">⚠️ Không tải được danh sách</div>'; }
+}
+async function applyRosterFromLogbook(id){
+  let data;
+  try{
+    const res = await supabaseClient.from('logbooks').select('students').eq('id', id).maybeSingle();
+    data = res && res.data;
+  }catch(e){ alert('Không tải được danh sách của bảng này'); return; }
+  const names = (data && Array.isArray(data.students) ? data.students : [])
+    .map(function(s){ return (s && s.name || '').trim(); })
+    .filter(function(n){ return n !== ''; });
+  if(!names.length){ alert('Bảng này chưa có thành viên nào'); return; }
+  if(_lbStudents.length && !confirm('Danh sách thành viên hiện tại (' + _lbStudents.length + ' người) sẽ được thay bằng danh sách mới (' + names.length + ' người, giữ đúng thứ tự). Tiếp tục?')) return;
+  _lbStudents = names.map(function(n){ return { name: n, tallies: {}, comment: '' }; });
+  renderEditTable();
+  closeRosterPicker();
+}
+
+async function saveLogbook(){
+  const title = (document.getElementById('lbTitle').value || '').trim();
+  if(!title){ alert('Vui lòng nhập tiêu đề bảng'); return; }
+  const payload = {
+    title: title,
+    note_html: document.getElementById('lbNoteEditor').innerHTML,
+    header_color: document.getElementById('lbHeaderColor').value,
+    is_latest: document.getElementById('lbIsLatest').checked,
+    log_date: document.getElementById('lbLogDate').value || null,
+    to_truong: document.getElementById('lbToTruong').value.trim(),
+    to_so: document.getElementById('lbToSo').value.trim(),
+    tuan_thu: document.getElementById('lbTuanThu').value.trim(),
+    from_date: document.getElementById('lbFromDate').value || null,
+    to_date: document.getElementById('lbToDate').value || null,
+    students: _lbStudents,
+    active: true,
+    updated_at: new Date().toISOString()
+  };
+  try{
+    let error;
+    if(_lbEditingId){
+      const res = await supabaseClient.from('logbooks').update(payload).eq('id', _lbEditingId);
+      error = res.error;
+    } else {
+      payload.id = 'lb_' + Date.now() + '_' + Math.random().toString(36).slice(2,8);
+      const res = await supabaseClient.from('logbooks').insert(payload);
+      error = res.error;
+    }
+    if(error){ console.error(error); alert('Lỗi: ' + (error.message || '')); return; }
+    cancelEditor();
+    loadLeaderPosts();
+  }catch(e){ console.error(e); alert('Có lỗi xảy ra, vui lòng thử lại'); }
+}
+
+async function deleteLogbook(id){
+  if(!confirm('Xoá bảng này? Không thể hoàn tác.')) return;
+  try{
+    await supabaseClient.from('logbooks').delete().eq('id', id);
+    loadLeaderPosts();
+  }catch(e){ console.error(e); }
+}
+
+async function loadOneLogbook(id){
+  try{
+    const { data, error } = await supabaseClient.from('logbooks').select('*').eq('id', id).maybeSingle();
+    if(error) return null;
+    return data;
+  }catch(e){ return null; }
+}
+
+function fmtDate(d){ return d ? d : ''; }
+
+async function loadLeaderPosts(){
+  const el = document.getElementById('leaderPostList');
+  el.innerHTML = '<div class="lb-empty">⏳ Đang tải...</div>';
+  try{
+    const { data, error } = await supabaseClient.from('logbooks').select('*').eq('active', true).order('log_date', { ascending: false, nullsFirst: false }).order('created_at', { ascending: false });
+    if(error || !data || !data.length){ el.innerHTML = '<div class="lb-empty">🗂️ Chưa có bảng nào - bấm "Tạo bảng mới" để bắt đầu</div>'; return; }
+    el.innerHTML = data.map(function(d){
+      return '<div class="lb-post-item" style="background:' + (d.header_color || '#8B7CF6') + '" onclick="openEditor(\'' + d.id + '\')">'
+        + '<div class="lb-post-actions"><button onclick="event.stopPropagation();deleteLogbook(\'' + d.id + '\')">🗑️ Xoá</button></div>'
+        + '<div class="row1"><span class="ttl">' + escapeHtml(d.title) + '</span>' + (d.is_latest ? '<span class="lb-tag-latest">Mới nhất</span>' : '') + '</div>'
+        + '<div class="meta">' + (d.log_date ? '📅 ' + escapeHtml(d.log_date) : '') + (d.to_so ? ' · ' + escapeHtml(d.to_so) : '') + ' · ' + ((d.students || []).length) + ' thành viên</div>'
+        + '</div>';
+    }).join('');
+  }catch(e){ console.error(e); el.innerHTML = '<div class="lb-empty">⚠️ Không tải được danh sách</div>'; }
+}
+
+async function loadMemberPosts(){
+  const el = document.getElementById('memberPostList');
+  el.innerHTML = '<div class="lb-empty">⏳ Đang tải...</div>';
+  try{
+    const { data, error } = await supabaseClient.from('logbooks').select('*').eq('active', true).order('log_date', { ascending: false, nullsFirst: false }).order('created_at', { ascending: false });
+    if(error || !data || !data.length){ el.innerHTML = '<div class="lb-empty">🗂️ Chưa có bảng theo dõi nào được đăng</div>'; return; }
+    el.innerHTML = data.map(function(d){
+      return '<div class="lb-post-item" style="background:' + (d.header_color || '#8B7CF6') + '" onclick="openMemberTable(\'' + d.id + '\')">'
+        + '<div class="row1"><span class="ttl">' + escapeHtml(d.title) + '</span>' + (d.is_latest ? '<span class="lb-tag-latest">Mới nhất</span>' : '') + '</div>'
+        + '<div class="meta">' + (d.log_date ? '📅 ' + escapeHtml(d.log_date) : '') + (d.to_so ? ' · ' + escapeHtml(d.to_so) : '') + '</div>'
+        + '</div>';
+    }).join('');
+  }catch(e){ console.error(e); el.innerHTML = '<div class="lb-empty">⚠️ Không tải được danh sách</div>'; }
+}
+
+function closeMemberTable(){
+  document.getElementById('memberTableView').classList.add('hide');
+  document.getElementById('memberPostList').classList.remove('hide');
+}
+
+async function openMemberTable(id){
+  const data = await loadOneLogbook(id);
+  if(!data){ alert('Không tìm thấy bảng này'); return; }
+  document.getElementById('memberPostList').classList.add('hide');
+  document.getElementById('memberTableView').classList.remove('hide');
+  document.getElementById('memTitle').textContent = data.title || '';
+  document.getElementById('memNote').innerHTML = data.note_html || '';
+  document.getElementById('memMeta').innerHTML =
+    '<b>Tổ trưởng:</b> ' + escapeHtml(data.to_truong || '—') + ' &nbsp; | &nbsp; ' +
+    '<b>Tổ:</b> ' + escapeHtml(data.to_so || '—') + ' &nbsp; | &nbsp; ' +
+    '<b>Tuần thứ:</b> ' + escapeHtml(data.tuan_thu || '—') + '<br>' +
+    '<b>Từ ngày:</b> ' + escapeHtml(data.from_date || '—') + ' &nbsp; <b>đến ngày:</b> ' + escapeHtml(data.to_date || '—');
+
+  const table = document.getElementById('memTable');
+  let thead = '<tr><th>STT</th><th>Tên học sinh</th>';
+  CATEGORIES.forEach(function(cat){ thead += '<th style="background:' + cat.color + ';width:54px" title="' + escapeHtml(cat.label) + '">' + escapeHtml(cat.short||cat.label) + '</th>'; });
+  thead += '<th class="cmt-th">Nhận xét chung</th></tr>';
+  let rows = '';
+  (data.students || []).forEach(function(s, idx){
+    rows += '<tr><td class="stt">' + (idx + 1) + '</td><td class="name-cell">' + escapeHtml(s.name || '') + '</td>';
+    CATEGORIES.forEach(function(cat){
+      const v = (s.tallies && s.tallies[cat.key]) || 0;
+      rows += '<td style="background:' + cat.color + '">' + (v > 0 ? v : '') + '</td>';
+    });
+    rows += '<td class="comment-cell">' + escapeHtml(s.comment || '') + '</td></tr>';
+  });
+  table.innerHTML = thead + rows;
+}
+</script>
+</body>
+</html>

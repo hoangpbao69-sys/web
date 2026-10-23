@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎙️ Đọc Truyện — Thư Viện Bài Soạn</title>
+<!-- UI thích ứng thiết bị + spinner dùng chung (laptop giữ nguyên giao diện) -->
+<link rel="stylesheet" href="lib/mobile-ui.css">
+<script src="lib/mobile-ui.js"></script>
+
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,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">
+<link rel="icon" type="image/png" sizes="16x16" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADAUlEQVR42nVTSUxTURS99/W39Je2tBQobaEKDoEoCo6RRKNGdurGaNxpYowxxoXGhSs/jcaFxhhNTBwWstFI47Ax0eCiDsEJGQSt0FKK2glKP3bm9/++5wYMATmrm9xzbk5uzgFYAoIgkP/NS4IxhgAAL7xvbM9HPM1zwjmxJ9jf3PWj1z6fCwDALTzkDQTJckf5ycHYp4511Vs/AADc6H7W6o/9PpaPJIWFfG6hi1MdV4sUsmJqJnfmmPvaSI2a0OFfwXNmovXbS6ky64gtOtAOgC5ECgCx84+u0I9j4w05qmkLSaLsrHI661Y6vp/YcThGgQG0txPGGCAi4wAABCYQFyL9Ev7mnDQU6oIDg52j4fheq0672/8rlS3o86RExTr33TyyvVxtSLgQva45B4IgEBe66IPPz+sTNHOblWjb1mze+BYlXVe392tDZXklbXAu6+YNeKvWYdthRHN/38SgyFP1g0Zb433Vm9evwX3woKZI0g8llVwhccxcp7asMFj4DawAPWaDMdO0tuZoSkqt6Hz/tbjeVpOUjSVbOIUb77h57yUBRNZUq7+u1mrb4uJ0eGwizoUyolzFG7XWWt2yMruxhtKkdkJMyNl0FGbyad+PsXHleyjK/3viVD7tiyQSTMlMAcd4zi8zqLevBiYXWnLZMIvrakHSVKhXteyBGd6imoxEuQxPYgAABACgxzdMfL9/KvWW6pydkIFg2B96OvyKqgiyD4EAvejuou9G/0w6iMnb29cL6VQ2uqtx9eN/DpqsdVxOpuquoeHWVE7KEUUR0xatmjkz5dFpwkwSiHwyhJOJXKXVbKywm8reH2jeOQQAwM3G8o4GUP9EjB/nmGwe/dTnqbaVjVSRUnuL2VrMc+mqikqTY23DJkN1qemurkAubKNu1SE8VMQFSdQDgIojJHnaffnlVCQhjUXiyq7Wdc5L+88eBgAVIvrma8hchD0eD4eIGURMKkNDGiOvp4USMlBUWH+3NzCNiAFE9AmCQOaXaVEjl1rO7hbV+i8CI3WSZ9kKkAAAAABJRU5ErkJggg==">
+<link rel="shortcut icon" href="data:image/png;base64,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">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.0/lame.min.js"></script>
+<style>
+  :root{
+    --bg: #12142B;
+    --bg-deep: #0C0D20;
+    --panel: #1B1E3D;
+    --panel-2: #232752;
+    --hairline: rgba(237,235,250,0.10);
+    --paper: #F6F1E4;
+    --ink: #2B2418;
+    --ink-muted: #6b6252;
+    --gold: #E8B04B;
+    --gold-soft: #F4D48C;
+    --violet: #A78BFA;
+    --text: #EDEBFA;
+    --muted: #8B8FB0;
+    --ok: #7FE0B0;
+    --err: #F2727A;
+    --radius: 14px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: radial-gradient(ellipse at 20% -10%, #1c2050 0%, var(--bg) 45%, var(--bg-deep) 100%);
+    color: var(--text);
+    font-family: 'Manrope', sans-serif;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+  .sky{
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      radial-gradient(1.5px 1.5px at 10% 20%, rgba(237,235,250,0.55) 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 80% 10%, rgba(237,235,250,0.4) 50%, transparent 51%),
+      radial-gradient(1px 1px at 60% 35%, rgba(237,235,250,0.5) 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 30% 60%, rgba(237,235,250,0.35) 50%, transparent 51%),
+      radial-gradient(1px 1px at 90% 70%, rgba(237,235,250,0.5) 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 45% 85%, rgba(237,235,250,0.3) 50%, transparent 51%),
+      radial-gradient(1px 1px at 15% 90%, rgba(237,235,250,0.45) 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 70% 50%, rgba(237,235,250,0.3) 50%, transparent 51%);
+    animation: twinkle 6s ease-in-out infinite alternate;
+  }
+  @keyframes twinkle{ from{ opacity: .55; } to{ opacity: 1; } }
+  .wrap{ position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; padding: 48px 24px 80px; }
+  header.hero{ margin-bottom: 40px; }
+  .eyebrow{ font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-soft); font-weight: 700; margin-bottom: 14px; display:block; }
+  h1{ font-family: 'Fraunces', serif; font-weight: 600; font-size: clamp(32px, 5vw, 52px); line-height: 1.08; margin: 0 0 14px; letter-spacing: -0.01em; }
+  h1 em{ font-style: italic; color: var(--gold-soft); }
+  .lede{ color: var(--muted); font-size: 16.5px; line-height: 1.6; max-width: 640px; margin: 0; }
+  .grid{ display: grid; grid-template-columns: 1.15fr 1fr; gap: 24px; align-items: start; }
+  @media (max-width: 920px){ .grid{ grid-template-columns: 1fr; } }
+  .panel{ background: var(--panel); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 22px; }
+  .panel + .panel{ margin-top: 20px; }
+  .panel h2{ font-family: 'Fraunces', serif; font-weight: 600; font-size: 19px; margin: 0 0 4px; }
+  .panel .sub{ color: var(--muted); font-size: 13.5px; margin: 0 0 16px; line-height: 1.5; }
+  .manuscript{ background: var(--paper); color: var(--ink); border-radius: 10px; padding: 4px; box-shadow: inset 0 0 0 1px rgba(43,36,24,0.08); }
+  textarea{ width: 100%; min-height: 340px; resize: vertical; background: transparent; border: none; outline: none; color: var(--ink); font-family: 'Fraunces', serif; font-size: 16.5px; line-height: 1.75; padding: 18px 16px; font-weight: 400; }
+  textarea::placeholder{ color: var(--ink-muted); font-style: italic; }
+  .manuscript-foot{ display: flex; justify-content: space-between; align-items: center; padding: 8px 4px 2px; font-size: 12.5px; color: var(--muted); }
+  .manuscript-foot span b{ color: var(--gold-soft); }
+  .row{ display:flex; gap: 10px; align-items: center; margin-top: 14px; flex-wrap: wrap; }
+  .btn{ font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 14px; border-radius: 999px; border: 1px solid var(--hairline); cursor: pointer; padding: 10px 18px; background: var(--panel-2); color: var(--text); transition: transform .12s ease, border-color .12s ease, background .12s ease; }
+  .btn:hover{ border-color: rgba(237,235,250,0.28); }
+  .btn:active{ transform: scale(0.98); }
+  .btn.ghost{ background: transparent; }
+  .btn.gold{ background: linear-gradient(180deg, var(--gold-soft), var(--gold)); color: #241a04; border: none; }
+  .btn.gold:hover{ filter: brightness(1.05); }
+  .btn.danger{ background: transparent; border-color: rgba(242,114,122,0.4); color: var(--err); }
+  .btn:disabled{ opacity: .5; cursor: not-allowed; transform:none; }
+  .btn.full{ width: 100%; text-align: center; justify-content: center; }
+  input[type=file]{ display: none; }
+  .tabs{ display: flex; gap: 8px; margin-bottom: 14px; }
+  .tab{ font-size: 13px; font-weight: 700; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--hairline); color: var(--muted); cursor: pointer; background: transparent; }
+  .tab.active{ background: var(--panel-2); color: var(--text); border-color: rgba(237,235,250,0.25); }
+  .star-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; max-height: 320px; overflow-y: auto; padding-right: 4px; margin-bottom: 4px; }
+  .star-grid::-webkit-scrollbar{ width: 6px; }
+  .star-grid::-webkit-scrollbar-thumb{ background: rgba(237,235,250,0.15); border-radius: 4px; }
+  .star{ position: relative; text-align: left; cursor: pointer; background: var(--panel-2); border: 1px solid transparent; border-radius: 10px; padding: 10px 12px 11px; color: var(--text); transition: border-color .12s ease, box-shadow .12s ease, transform .12s ease; }
+  .star:hover{ transform: translateY(-1px); }
+  .star::before{ content: ""; position: absolute; top: 10px; right: 10px; width: 6px; height: 6px; border-radius: 50%; background: var(--muted); transition: background .15s ease, box-shadow .15s ease; }
+  .star .name{ font-family: 'Fraunces', serif; font-weight: 600; font-size: 14.5px; display:block; }
+  .star .style{ font-size: 11px; color: var(--muted); display:block; margin-top: 3px; line-height: 1.4; }
+  .star .gender{ font-size: 10px; color: var(--violet); text-transform: uppercase; letter-spacing: .06em; font-weight: 700; margin-top: 6px; display:block; }
+  .star.selected{ border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold) inset, 0 0 18px rgba(232,176,75,0.25); }
+  .star.selected::before{ background: var(--gold); box-shadow: 0 0 8px 2px rgba(232,176,75,0.7); }
+  .star.selected .style{ color: var(--gold-soft); }
+  details.advanced{ margin-top: 16px; border-top: 1px solid var(--hairline); padding-top: 14px; }
+  details.advanced summary{ cursor: pointer; font-size: 13px; font-weight: 700; color: var(--muted); list-style: none; }
+  details.advanced summary::-webkit-details-marker{ display:none; }
+  details.advanced summary:before{ content: "＋ "; color: var(--gold-soft); }
+  details.advanced[open] summary:before{ content: "－ "; }
+  details.advanced .content{ margin-top: 12px; }
+  label.field-label{ font-size: 12.5px; color: var(--muted); display:block; margin-bottom: 6px; }
+  textarea#apiKeysInput{
+    width: 100%; min-height: 90px; background: var(--bg-deep); border: 1px solid var(--hairline); color: var(--text);
+    border-radius: 8px; padding: 10px 12px; font-family: 'Manrope', monospace; font-size: 12.5px; outline: none; line-height: 1.6;
+  }
+  textarea#apiKeysInput:focus{ border-color: var(--gold); }
+  .hint{ font-size: 11.5px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+  .hint.warn{ color: var(--gold-soft); }
+  .progress-track{ height: 8px; border-radius: 999px; background: var(--bg-deep); overflow: hidden; margin: 14px 0 10px; }
+  .progress-fill{ height: 100%; width: 0%; border-radius: 999px; background: linear-gradient(90deg, var(--violet), var(--gold)); transition: width .3s ease; }
+  .status-line{ font-size: 13.5px; color: var(--text); min-height: 18px; }
+  .status-line.error{ color: var(--err); }
+  .status-line.done{ color: var(--ok); }
+  .log{ margin-top: 12px; background: var(--bg-deep); border: 1px solid var(--hairline); border-radius: 10px; padding: 10px 12px; max-height: 170px; overflow-y: auto; font-family: 'Manrope', monospace; font-size: 11.5px; color: var(--muted); line-height: 1.7; display: none; }
+  .log.visible{ display: block; }
+  .log div{ white-space: pre-wrap; word-break: break-word; }
+  .download-box{ display:none; margin-top: 14px; }
+  .download-box.visible{ display:block; }
+  .action-row{ display:flex; gap: 10px; margin-top: 18px; }
+  footer.note{ margin-top: 34px; color: var(--muted); font-size: 12.5px; line-height: 1.7; border-top: 1px solid var(--hairline); padding-top: 18px; }
+  footer.note b{ color: var(--text); }
+</style>
+</head>
+<body>
+<!-- ===== Global Loading Spinner (tự thêm) ===== -->
+<div id="global-page-loader" role="status" aria-live="polite" aria-label="Đang tải trang">
+  <div class="gpl-spinner"><span></span></div>
+  <p class="gpl-text">Đang tải...</p>
+</div>
+<style>
+#global-page-loader{position:fixed;inset:0;z-index:999999;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .35s ease,visibility .35s ease}
+#global-page-loader.gpl-hide{opacity:0;visibility:hidden;pointer-events:none}
+.gpl-spinner{width:56px;height:56px;border-radius:50%;border:5px solid #fbd7e4;position:relative}
+.gpl-spinner span{position:absolute;inset:-5px;border-radius:50%;border:5px solid transparent;border-top-color:#ec1561;border-right-color:#ec1561;animation:gpl-spin .8s linear infinite}
+.gpl-text{margin:0;font-family:'Baloo 2','Quicksand','Mali','Segoe UI',sans-serif;font-weight:700;font-size:15px;color:#3f3a4a;letter-spacing:.2px}
+@keyframes gpl-spin{to{transform:rotate(360deg)}}
+html.gpl-loading{overflow:hidden}
+</style>
+<script>
+(function(){
+  document.documentElement.classList.add('gpl-loading');
+  function gplHide(){
+    var el = document.getElementById('global-page-loader');
+    if(!el || el.dataset.hidden) return;
+    el.dataset.hidden = '1';
+    document.documentElement.classList.remove('gpl-loading');
+    el.classList.add('gpl-hide');
+    setTimeout(function(){ el.remove(); }, 400);
+  }
+  window.addEventListener('load', gplHide);
+  setTimeout(gplHide, 6000); // an toàn: tự ẩn sau tối đa 6 giây phòng khi sự kiện load không kích hoạt
+})();
+</script>
+<div class="sky"></div>
+<a href="index.html" title="Quay lại Trang chủ" style="position:fixed;top:18px;left:18px;z-index:50;display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:999px;background:var(--panel-2);border:1px solid var(--hairline);color:var(--text);text-decoration:none;font-family:'Manrope',sans-serif;font-weight:700;font-size:13px;backdrop-filter:blur(8px)">🏡 Trang chủ</a>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="eyebrow">Gemini TTS · chạy thẳng trên trình duyệt, không cần cài gì</span>
+    <h1>Biến chữ thành lời,<br><em>từng vì sao một giọng</em></h1>
+    <p class="lede">Dán văn bản vào trang giấy bên dưới, chọn một trong 30 giọng đọc — mỗi giọng mang tên một ngôi sao hay hành tinh — rồi để công cụ tự chia đoạn, tự xoay vòng API Key và ghép lại thành một file MP3 hoàn chỉnh. Mọi thứ chạy ngay trong file HTML này, không cần server.</p>
+  </header>
+
+  <div class="grid">
+    <div>
+      <div class="panel">
+        <h2>Bản thảo</h2>
+        <p class="sub">Dán hoặc tải lên nội dung cần đọc. Không giới hạn độ dài — công cụ tự chia nhỏ và không làm rơi mất một ký tự nào.</p>
+        <div class="manuscript">
+          <textarea id="textInput" placeholder="Ngày xưa, ở một vùng quê nọ…"></textarea>
+        </div>
+        <div class="manuscript-foot">
+          <span><b id="charCount">0</b> ký tự</span>
+          <span>~<b id="chunkEstimate">0</b> đoạn sẽ được gửi đi</span>
+        </div>
+        <div class="row">
+          <button class="btn ghost" id="uploadBtn" type="button">Tải file .txt</button>
+          <input type="file" id="fileInput" accept=".txt">
+          <button class="btn ghost" id="clearBtn" type="button">Xoá</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="panel">
+        <h2>Chọn giọng đọc</h2>
+        <p class="sub">Tên giọng chỉ quyết định chất giọng — ngôn ngữ đọc ra luôn khớp với văn bản bạn dán vào.</p>
+
+        <div class="tabs">
+          <button class="tab active" data-filter="all" type="button">Tất cả</button>
+          <button class="tab" data-filter="Nữ" type="button">Nữ</button>
+          <button class="tab" data-filter="Nam" type="button">Nam</button>
+        </div>
+
+        <div class="star-grid" id="starGrid"></div>
+
+        <details class="advanced">
+          <summary>API Key</summary>
+          <div class="content">
+            <label class="field-label" for="apiKeysInput">Dán API Key Gemini (mỗi dòng 1 key — có thể dán nhiều key để tự xoay vòng khi hết quota)</label>
+            <textarea id="apiKeysInput" placeholder="AIzaSy...&#10;AIzaSy..."></textarea>
+            <p class="hint">Key chỉ nằm trong bộ nhớ của trang này (không lưu lại, không gửi đi đâu ngoài Google) — đóng hoặc tải lại trang là mất, cần dán lại. Trình duyệt sẽ gọi thẳng đến API của Google bằng key này.</p>
+            <p class="hint warn">⚠️ Vì đây là 1 file HTML chạy trên máy bạn, key sẽ hiện ra trong tab Network của trình duyệt khi tool chạy — đừng mở file này trên máy tính công cộng hoặc chia sẻ file đã dán sẵn key cho người khác.</p>
+          </div>
+        </details>
+
+        <div class="action-row">
+          <button class="btn gold full" id="generateBtn" type="button">Tạo giọng đọc</button>
+          <button class="btn danger" id="cancelBtn" type="button" style="display:none;">Huỷ</button>
+        </div>
+
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="status-line" id="statusLine"></div>
+        <div class="log" id="logBox"></div>
+
+        <div class="download-box" id="downloadBox">
+          <a class="btn gold full" id="downloadLink" href="#" download="giongdoc.mp3">Tải file MP3 về máy</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="note">
+    <b>Về API Key:</b> mỗi key có thể bị giới hạn quota theo ngày. Dán nhiều key (mỗi dòng 1 key) để tool tự xoay vòng
+    khi 1 key bị hết hạn mức. <b>Lưu ý:</b> nếu trình duyệt chặn yêu cầu gọi Google API do CORS khi mở file trực tiếp
+    (đường dẫn bắt đầu bằng <code>file://</code>), hãy chạy 1 server tĩnh đơn giản rồi mở qua <code>http://localhost</code>,
+    ví dụ: <code>python -m http.server</code> trong thư mục chứa file này.
+  </footer>
+</div>
+
+<script>
+// ============================================================
+// DỮ LIỆU GIỌNG ĐỌC
+// ============================================================
+const VOICES = [
+  ["Kore","Chắc chắn, dứt khoát","Văn học, tiểu thuyết, truyện nghiêm túc (mặc định)","Nữ"],
+  ["Orus","Chắc chắn, dứt khoát","Văn bản trang trọng, tài liệu, tường thuật","Nam"],
+  ["Alnilam","Chắc chắn, dứt khoát","Văn bản trang trọng, thông báo","Nam"],
+  ["Charon","Giàu thông tin","Audiobook kiến thức, tài liệu, thuyết minh","Nam"],
+  ["Rasalgethi","Giàu thông tin","Podcast kiến thức, giải thích, hướng dẫn","Nam"],
+  ["Sadaltager","Am hiểu, chuyên gia","Podcast chuyên môn, giọng người dẫn dắt","Nam"],
+  ["Iapetus","Rõ ràng, mạch lạc","Đọc tin tức, sách giáo khoa, tài liệu học","Nam"],
+  ["Erinome","Rõ ràng, mạch lạc","Đọc tin tức, thông báo, hướng dẫn","Nữ"],
+  ["Schedar","Đều đặn, ổn định","Audiobook dài, truyện dài kỳ","Nam"],
+  ["Gacrux","Trưởng thành, từng trải","Tiểu thuyết người lớn, nhân vật lớn tuổi","Nữ"],
+  ["Algenib","Khàn, có chất riêng","Nhân vật cá tính, truyện trinh thám/kịch tính","Nam"],
+  ["Sulafat","Ấm áp","Truyện tình cảm, tản văn, tâm sự","Nữ"],
+  ["Vindemiatrix","Dịu dàng, nhẹ nhàng","Truyện thiếu nhi, cổ tích, ru ngủ","Nữ"],
+  ["Achernar","Mềm mại, nhỏ nhẹ","Truyện nhẹ nhàng, thư giãn, ASMR","Nữ"],
+  ["Enceladus","Thì thầm, hơi thở nhẹ","Tâm sự, ASMR, phân đoạn cảm xúc","Nam"],
+  ["Leda","Trẻ trung","Nhân vật trẻ, truyện tuổi teen","Nữ"],
+  ["Achird","Thân thiện, gần gũi","Podcast trò chuyện, chia sẻ đời thường","Nam"],
+  ["Zubenelgenubi","Tự nhiên, đời thường","Podcast tự nhiên, hội thoại phiếm","Nam"],
+  ["Callirrhoe","Thoải mái, dễ chịu","Podcast thư giãn, trò chuyện nhẹ nhàng","Nữ"],
+  ["Umbriel","Thoải mái, dễ chịu","Podcast thư giãn, kể chuyện phiếm","Nam"],
+  ["Aoede","Nhẹ nhàng, phóng khoáng","Podcast phong cách tự do, đời sống","Nữ"],
+  ["Puck","Vui tươi, sôi nổi","Podcast năng động, quảng cáo, MC trẻ trung","Nam"],
+  ["Laomedeia","Vui tươi, sôi nổi","Quảng cáo, giới thiệu sản phẩm","Nữ"],
+  ["Fenrir","Hào hứng, kích động","Bình luận thể thao, tin nóng, hào hứng","Nam"],
+  ["Zephyr","Tươi sáng","Tin tức buổi sáng, năng lượng tích cực","Nữ"],
+  ["Autonoe","Tươi sáng","MC sự kiện, dẫn chương trình","Nữ"],
+  ["Algieba","Mượt mà","Quảng cáo, giọng đọc thương mại","Nam"],
+  ["Despina","Mượt mà","Quảng cáo, giọng đọc thương mại","Nữ"],
+  ["Pulcherrima","Mạnh mẽ, quyết đoán","Quảng cáo, hiệu triệu, kêu gọi hành động","Nữ"],
+  ["Sadachbia","Sôi nổi, tràn năng lượng","Nội dung vui nhộn, năng động","Nam"],
+];
+const DEFAULT_VOICE = "Kore";
+
+// ============================================================
+// CẤU HÌNH
+// ============================================================
+const MODEL_NAME = "gemini-3.1-flash-tts-preview";
+const MAX_CHUNK_LEN = 600;
+const MIN_TAIL_CHUNK_LEN = 120;
+const MAX_RETRY_PER_CHUNK = 8;
+const MAX_SPLIT_DEPTH = 5;
+const MAX_CONSECUTIVE_OTHER_PER_KEY = 3;
+const MAX_KEYS_BEFORE_SPLIT = 3;
+const SAFETY_SETTINGS = [
+  {category:"HARM_CATEGORY_HARASSMENT", threshold:"BLOCK_NONE"},
+  {category:"HARM_CATEGORY_HATE_SPEECH", threshold:"BLOCK_NONE"},
+  {category:"HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold:"BLOCK_ONLY_HIGH"},
+  {category:"HARM_CATEGORY_DANGEROUS_CONTENT", threshold:"BLOCK_NONE"},
+];
+
+function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+class GenerationError extends Error {
+  constructor(reason, message){ super(message || reason); this.reason = reason; }
+}
+
+// ============================================================
+// CHIA VĂN BẢN THÀNH ĐOẠN NHỎ (port từ tts_core.py)
+// ============================================================
+function splitLongParagraph(para, maxLen){
+  if (para.length <= maxLen) return [para];
+  const sentences = para.split(/(?<=[.!?…])\s+/);
+  const pieces = [];
+  let buf = "";
+  for (let sent of sentences){
+    sent = sent.trim();
+    if (!sent) continue;
+    if (sent.length > maxLen){
+      if (buf){ pieces.push(buf.trim()); buf = ""; }
+      const words = sent.split(" ");
+      let sub = "";
+      for (const w of words){
+        if (sub.length + w.length + 1 > maxLen){
+          if (sub) pieces.push(sub.trim());
+          sub = w;
+        } else {
+          sub = (sub + " " + w).trim();
+        }
+      }
+      if (sub) pieces.push(sub.trim());
+      continue;
+    }
+    if (buf.length + sent.length + 1 <= maxLen){
+      buf = (buf + " " + sent).trim();
+    } else {
+      if (buf) pieces.push(buf.trim());
+      buf = sent;
+    }
+  }
+  if (buf) pieces.push(buf.trim());
+  return pieces;
+}
+
+function buildChunks(textContent, maxLen = MAX_CHUNK_LEN, minTail = MIN_TAIL_CHUNK_LEN){
+  const rawParagraphs = textContent.split('\n').map(p => p.trim()).filter(p => p);
+  let chunks = [];
+  let currentChunk = "";
+  for (const para of rawParagraphs){
+    const subParts = splitLongParagraph(para, maxLen);
+    for (const part of subParts){
+      if (currentChunk.length + part.length + 1 < maxLen){
+        currentChunk = currentChunk ? (currentChunk + "\n" + part).trim() : part;
+      } else {
+        if (currentChunk) chunks.push(currentChunk.trim());
+        currentChunk = part;
+      }
+    }
+  }
+  if (currentChunk) chunks.push(currentChunk.trim());
+
+  while (chunks.length >= 2 && chunks[chunks.length - 1].length < minTail){
+    const merged = (chunks[chunks.length - 2].trim() + "\n" + chunks[chunks.length - 1].trim()).trim();
+    chunks[chunks.length - 2] = merged;
+    chunks.pop();
+  }
+
+  const stripSpace = s => s.replace(/\s+/g, '');
+  if (stripSpace(textContent) !== stripSpace(chunks.join(''))){
+    throw new GenerationError('split_failed', 'Lỗi nghiêm trọng: bước chia đoạn làm mất/méo ký tự so với văn bản gốc.');
+  }
+  return chunks;
+}
+
+function splitTextInHalf(text){
+  text = text.trim();
+  if (text.length < 20) return null;
+  const words = text.split(" ").filter(w => w !== "");
+  if (words.length < 2) return null;
+  const mid = Math.floor(words.length / 2);
+  const left = words.slice(0, mid).join(" ").trim();
+  const right = words.slice(mid).join(" ").trim();
+  if (!left || !right) return null;
+  return [left, right];
+}
+
+// ============================================================
+// TIỆN ÍCH: base64 -> bytes, ghép mảng byte, chuyển PCM -> MP3
+// ============================================================
+function base64ToUint8Array(base64){
+  const binaryString = atob(base64);
+  const bytes = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) bytes[i] = binaryString.charCodeAt(i);
+  return bytes;
+}
+
+function concatUint8Arrays(arrays){
+  let total = 0;
+  for (const a of arrays) total += a.length;
+  const out = new Uint8Array(total);
+  let offset = 0;
+  for (const a of arrays){ out.set(a, offset); offset += a.length; }
+  return out;
+}
+
+function parseSampleRate(mimeType){
+  if (!mimeType) return null;
+  const m = /rate=(\d+)/.exec(mimeType);
+  return m ? parseInt(m[1], 10) : null;
+}
+
+function encodePcmToMp3(pcmBytes, sampleRate){
+  const numSamples = Math.floor(pcmBytes.length / 2);
+  const samples = new Int16Array(numSamples);
+  const dv = new DataView(pcmBytes.buffer, pcmBytes.byteOffset, pcmBytes.byteLength);
+  for (let i = 0; i < numSamples; i++) samples[i] = dv.getInt16(i * 2, true);
+
+  const mp3encoder = new lamejs.Mp3Encoder(1, sampleRate, 128);
+  const blockSize = 1152;
+  const mp3Data = [];
+  for (let i = 0; i < samples.length; i += blockSize){
+    const chunk = samples.subarray(i, i + blockSize);
+    const buf = mp3encoder.encodeBuffer(chunk);
+    if (buf.length > 0) mp3Data.push(buf);
+  }
+  const endBuf = mp3encoder.flush();
+  if (endBuf.length > 0) mp3Data.push(endBuf);
+  return new Blob(mp3Data, {type: 'audio/mp3'});
+}
+
+// ============================================================
+// ĐỌC RESPONSE TỪ GEMINI
+// ============================================================
+function extractAudioResult(json){
+  const candidates = json && json.candidates;
+  if (!candidates || !candidates.length) return null;
+  const content = candidates[0].content;
+  if (!content || !content.parts || !content.parts.length) return null;
+  const inlineData = content.parts[0].inlineData;
+  if (!inlineData || !inlineData.data) return null;
+  return { bytes: base64ToUint8Array(inlineData.data), mimeType: inlineData.mimeType };
+}
+
+function getFinishReason(json){
+  const candidates = json && json.candidates;
+  if (!candidates || !candidates.length) return null;
+  return candidates[0].finishReason || null;
+}
+
+// ============================================================
+// JOB: xoay vòng key + retry + tự chia đôi khi lỗi
+// ============================================================
+class TTSJob {
+  constructor(apiKeys, voiceName, opts = {}){
+    this.apiKeys = apiKeys;
+    this.voiceName = voiceName;
+    this.maxChunkLen = opts.maxChunkLen || MAX_CHUNK_LEN;
+    this.onProgress = opts.onProgress || function(){};
+    this.onLog = opts.onLog || function(){};
+    this.currentKeyIndex = 0;
+    this.sampleRate = 24000;
+    this._sampleRateSet = false;
+    this.cancelled = false;
+  }
+
+  log(msg){ this.onLog(msg); }
+  keyTag(){ return `Key #${this.currentKeyIndex + 1}/${this.apiKeys.length}`; }
+
+  async callApi(text){
+    const key = this.apiKeys[this.currentKeyIndex];
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${encodeURIComponent(key)}`;
+    const body = {
+      contents: [{ parts: [{ text }] }],
+      generationConfig: {
+        responseModalities: ["AUDIO"],
+        speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: this.voiceName } } },
+      },
+      safetySettings: SAFETY_SETTINGS,
+    };
+    let res;
+    try {
+      res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+    } catch (networkErr){
+      const e = new Error(String(networkErr && networkErr.message || networkErr));
+      e.kind = 'transient';
+      throw e;
+    }
+    let json = null;
+    try { json = await res.json(); } catch (e2) { json = null; }
+    if (!res.ok){
+      const status = res.status;
+      const msg = (json && json.error && json.error.message) ? json.error.message : `HTTP ${status}`;
+      const e = new Error(msg);
+      if (status === 429) e.kind = 'quota';
+      else if ([500, 503, 504].includes(status)) e.kind = 'transient';
+      else e.kind = 'other';
+      throw e;
+    }
+    return json;
+  }
+
+  async tryGenerateAudio(text){
+    let keysTried = 1;
+    while (true){
+      let rotateRequested = false;
+      let keyExhaustedEarly = false;
+      let consecutiveOther = 0;
+      let rawAudioBytes = null;
+      let chunkFailedReason = null;
+      let brokeOut = false;
+
+      for (let retryNum = 1; retryNum <= MAX_RETRY_PER_CHUNK; retryNum++){
+        if (this.cancelled) throw new GenerationError('cancelled', 'Đã huỷ.');
+        try {
+          const json = await this.callApi(text);
+          const result = extractAudioResult(json);
+
+          if (result === null){
+            const waitS = Math.min(2 * retryNum, 20);
+            this.log(`[${this.keyTag()}] Lần thử ${retryNum}/${MAX_RETRY_PER_CHUNK}: rỗng, đợi ${waitS}s...`);
+            const finishReason = getFinishReason(json);
+            if (finishReason && String(finishReason).includes('OTHER')) consecutiveOther++;
+            else consecutiveOther = 0;
+
+            if (consecutiveOther >= MAX_CONSECUTIVE_OTHER_PER_KEY){
+              this.log(`[${this.keyTag()}] Dính OTHER ${MAX_CONSECUTIVE_OTHER_PER_KEY} lần liên tiếp, dừng sớm với key này.`);
+              keyExhaustedEarly = true;
+              brokeOut = true;
+              break;
+            }
+            await sleep(waitS * 1000);
+            continue;
+          }
+
+          rawAudioBytes = result.bytes;
+          if (!this._sampleRateSet){
+            this.sampleRate = parseSampleRate(result.mimeType) || 24000;
+            this._sampleRateSet = true;
+          }
+          brokeOut = true;
+          break;
+
+        } catch (err){
+          brokeOut = true;
+          const kind = err.kind || 'other';
+          if (kind === 'quota'){
+            if (this.currentKeyIndex < this.apiKeys.length - 1){
+              this.currentKeyIndex++; keysTried++;
+              this.log(`Key hết quota (429), chuyển sang ${this.keyTag()}...`);
+              await sleep(1000);
+              rotateRequested = true;
+              break;
+            } else {
+              this.log('Tất cả API Key đều đã hết quota.');
+              chunkFailedReason = 'quota';
+              break;
+            }
+          } else if (kind === 'transient'){
+            const waitS = Math.min(5 * retryNum, 30);
+            this.log(`[${this.keyTag()}] Lần ${retryNum}/${MAX_RETRY_PER_CHUNK}: server quá tải/mất kết nối (${err.message || ''}), đợi ${waitS}s...`);
+            brokeOut = false;
+            await sleep(waitS * 1000);
+            continue;
+          } else {
+            this.log(`Lỗi: ${err.message || err}`);
+            chunkFailedReason = 'other';
+            break;
+          }
+        }
+      }
+      if (!brokeOut) keyExhaustedEarly = true;
+
+      if (rawAudioBytes !== null) return { audio: rawAudioBytes, reason: null };
+      if (chunkFailedReason !== null) return { audio: null, reason: chunkFailedReason };
+
+      if (keyExhaustedEarly){
+        if (keysTried < MAX_KEYS_BEFORE_SPLIT && this.currentKeyIndex < this.apiKeys.length - 1){
+          this.currentKeyIndex++; keysTried++;
+          this.log(`Vẫn rỗng sau nhiều lần thử, chuyển sang ${this.keyTag()}...`);
+          await sleep(1000);
+          rotateRequested = true;
+        } else {
+          return { audio: null, reason: 'empty' };
+        }
+      }
+
+      if (rotateRequested) continue;
+      return { audio: null, reason: chunkFailedReason };
+    }
+  }
+
+  async generateAudioWithAutoSplit(text, depth = 0){
+    const { audio, reason } = await this.tryGenerateAudio(text);
+    if (audio !== null) return { audio, reason: null };
+    if (reason === 'quota') return { audio: null, reason: 'quota' };
+
+    if (depth < MAX_SPLIT_DEPTH){
+      const halves = splitTextInHalf(text);
+      if (halves){
+        const [left, right] = halves;
+        this.log(`Đoạn ${text.length} ký tự vẫn lỗi (${reason}), tự động CHIA ĐÔI (tầng ${depth + 1}/${MAX_SPLIT_DEPTH})...`);
+        const leftRes = await this.generateAudioWithAutoSplit(left, depth + 1);
+        if (leftRes.audio === null) return leftRes;
+        const rightRes = await this.generateAudioWithAutoSplit(right, depth + 1);
+        if (rightRes.audio === null) return rightRes;
+        this.log(`Đã ghép xong 2 nửa của đoạn ${text.length} ký tự (tầng ${depth + 1}).`);
+        return { audio: concatUint8Arrays([leftRes.audio, rightRes.audio]), reason: null };
+      }
+    }
+    return { audio: null, reason };
+  }
+
+  async generate(textContent){
+    textContent = (textContent || '').trim();
+    if (!textContent) throw new GenerationError('empty_input', 'Văn bản trống.');
+
+    const chunks = buildChunks(textContent, this.maxChunkLen);
+    const total = chunks.length;
+    this.log(`Đã chia văn bản thành ${total} phần (mỗi phần tối đa khoảng ${this.maxChunkLen} ký tự).`);
+    this.onProgress(0, total, `Đã chia thành ${total} phần, bắt đầu tạo giọng đọc...`);
+
+    const pcmParts = [];
+    for (let i = 0; i < chunks.length; i++){
+      if (this.cancelled) throw new GenerationError('cancelled', 'Đã huỷ theo yêu cầu.');
+      this.onProgress(i, total, `Đang xử lý phần ${i + 1}/${total} (${chunks[i].length} ký tự)...`);
+      const { audio, reason } = await this.generateAudioWithAutoSplit(chunks[i]);
+
+      if (audio === null){
+        const reasonText = {
+          quota: 'Tất cả API Key đều đã hết quota.',
+          empty: 'Google liên tục trả về rỗng cho đoạn này (có thể do nội dung bị bộ lọc chặn).',
+          other: 'Gặp lỗi không xác định.',
+        }[reason] || `Lỗi: ${reason}`;
+        throw new GenerationError(reason || 'other', `Lỗi ở phần ${i + 1}/${total}: ${reasonText}`);
+      }
+
+      pcmParts.push(audio);
+      this.log(`Hoàn thành phần ${i + 1}/${total}.`);
+      this.onProgress(i + 1, total, `Đã xong phần ${i + 1}/${total}`);
+    }
+
+    this.onProgress(total, total, 'Đang nén thành file MP3...');
+    const pcmBytes = concatUint8Arrays(pcmParts);
+    const blob = encodePcmToMp3(pcmBytes, this.sampleRate);
+    this.log('Đã nén xong file MP3.');
+    return blob;
+  }
+}
+
+// ============================================================
+// GIAO DIỆN
+// ============================================================
+const textInput = document.getElementById('textInput');
+const charCount = document.getElementById('charCount');
+const chunkEstimate = document.getElementById('chunkEstimate');
+const uploadBtn = document.getElementById('uploadBtn');
+const fileInput = document.getElementById('fileInput');
+const clearBtn = document.getElementById('clearBtn');
+const starGrid = document.getElementById('starGrid');
+const tabs = document.querySelectorAll('.tab');
+const generateBtn = document.getElementById('generateBtn');
+const cancelBtn = document.getElementById('cancelBtn');
+const apiKeysInput = document.getElementById('apiKeysInput');
+const progressFill = document.getElementById('progressFill');
+const statusLine = document.getElementById('statusLine');
+const logBox = document.getElementById('logBox');
+const downloadBox = document.getElementById('downloadBox');
+const downloadLink = document.getElementById('downloadLink');
+
+let selectedVoice = DEFAULT_VOICE;
+let currentJob = null;
+
+function renderVoices(){
+  starGrid.innerHTML = VOICES.map(([name, style, fit, gender]) => `
+    <button type="button" class="star${name === DEFAULT_VOICE ? ' selected' : ''}"
+            data-voice="${name}" data-gender="${gender}" title="${fit}">
+      <span class="name">${name}</span>
+      <span class="style">${style}</span>
+      <span class="gender">${gender}</span>
+    </button>
+  `).join('');
+}
+renderVoices();
+
+function updateCounts(){
+  const len = textInput.value.length;
+  charCount.textContent = len.toLocaleString('vi-VN');
+  chunkEstimate.textContent = len === 0 ? 0 : Math.ceil(len / MAX_CHUNK_LEN);
+}
+textInput.addEventListener('input', updateCounts);
+updateCounts();
+
+uploadBtn.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', () => {
+  const file = fileInput.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => { textInput.value = e.target.result; updateCounts(); };
+  reader.readAsText(file, 'utf-8');
+});
+clearBtn.addEventListener('click', () => { textInput.value = ''; updateCounts(); });
+
+starGrid.addEventListener('click', e => {
+  const star = e.target.closest('.star');
+  if (!star) return;
+  document.querySelectorAll('.star.selected').forEach(s => s.classList.remove('selected'));
+  star.classList.add('selected');
+  selectedVoice = star.dataset.voice;
+});
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const filter = tab.dataset.filter;
+    document.querySelectorAll('.star').forEach(star => {
+      star.style.display = (filter === 'all' || star.dataset.gender === filter) ? '' : 'none';
+    });
+  });
+});
+
+function setStatus(text, kind){
+  statusLine.textContent = text;
+  statusLine.className = 'status-line' + (kind ? ' ' + kind : '');
+}
+
+function appendLog(msg){
+  logBox.classList.add('visible');
+  const div = document.createElement('div');
+  div.textContent = msg;
+  logBox.appendChild(div);
+  while (logBox.children.length > 300) logBox.removeChild(logBox.firstChild);
+  logBox.scrollTop = logBox.scrollHeight;
+}
+
+function parseApiKeys(){
+  return apiKeysInput.value.split('\n').map(k => k.trim()).filter(k => k);
+}
+
+function resetRunUI(){
+  downloadBox.classList.remove('visible');
+  logBox.classList.remove('visible');
+  logBox.innerHTML = '';
+  progressFill.style.width = '0%';
+  setStatus('');
+}
+
+function setRunningUI(isRunning){
+  generateBtn.disabled = isRunning;
+  generateBtn.textContent = isRunning ? 'Đang tạo...' : 'Tạo giọng đọc';
+  cancelBtn.style.display = isRunning ? 'inline-flex' : 'none';
+}
+
+generateBtn.addEventListener('click', async () => {
+  const text = textInput.value.trim();
+  if (!text){ setStatus('Vui lòng dán văn bản trước đã.', 'error'); return; }
+
+  const keys = parseApiKeys();
+  if (!keys.length){ setStatus('Vui lòng dán ít nhất 1 API Key ở mục "API Key" bên dưới.', 'error'); return; }
+
+  if (typeof lamejs === 'undefined'){
+    setStatus('Chưa tải được thư viện nén MP3 (lamejs). Kiểm tra kết nối mạng rồi tải lại trang.', 'error');
+    return;
+  }
+
+  resetRunUI();
+  setRunningUI(true);
+  setStatus('Đang gửi yêu cầu...');
+
+  currentJob = new TTSJob(keys, selectedVoice, {
+    onProgress: (current, total, message) => {
+      const pct = total > 0 ? Math.round((current / total) * 100) : 0;
+      progressFill.style.width = pct + '%';
+      setStatus(message);
+    },
+    onLog: appendLog,
+  });
+
+  try {
+    const blob = await currentJob.generate(text);
+    progressFill.style.width = '100%';
+    setStatus('Hoàn thành! File MP3 đã sẵn sàng.', 'done');
+    const url = URL.createObjectURL(blob);
+    downloadLink.href = url;
+    downloadBox.classList.add('visible');
+  } catch (err){
+    if (err && err.reason === 'cancelled'){
+      setStatus('Đã huỷ.', 'error');
+    } else {
+      setStatus((err && err.message) || 'Đã xảy ra lỗi không xác định.', 'error');
+    }
+  } finally {
+    setRunningUI(false);
+    currentJob = null;
+  }
+});
+
+cancelBtn.addEventListener('click', () => {
+  if (currentJob) currentJob.cancelled = true;
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+/* =========================================================
+   mobile-ui.css — Tái cấu trúc UI cho MOBILE / TABLET
+   ---------------------------------------------------------
+   NGUYÊN TẮC QUAN TRỌNG:
+   - Toàn bộ file này chỉ có tác dụng khi <html> có class "ui-mobile".
+     Class đó do lib/mobile-ui.js gắn vào, CHỈ khi thiết bị là
+     mobile/tablet. Trên laptop/desktop: KHÔNG có class -> KHÔNG
+     một dòng CSS nào ở đây được áp dụng -> UI laptop giữ nguyên 100%.
+   - Không xoá/ẩn chức năng nào, chỉ xếp lại cho gọn + tắt hiệu ứng.
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   1) TẮT HIỆU ỨNG (chống giật/lag/nóng máy)
+   ---------------------------------------------------------
+   Dùng kiểu "rút ngắn thời lượng về gần 0" thay vì "animation:none",
+   vì nhiều hộp thoại/modal dùng animation để đưa opacity 0 -> 1.
+   Nếu cắt hẳn animation thì các phần tử đó sẽ MẤT HIỂN THỊ.
+   Cách này giữ đúng trạng thái cuối, chỉ bỏ phần chuyển động.
+   iteration-count:1 để các animation lặp vô hạn (nhấp nháy, trôi,
+   xoay trang trí) dừng hẳn, không còn đốt CPU/GPU nền.
+--------------------------------------------------------- */
+html.ui-mobile *,
+html.ui-mobile *::before,
+html.ui-mobile *::after {
+  animation-duration: .01ms !important;
+  animation-delay: 0s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: .01ms !important;
+  transition-delay: 0s !important;
+  will-change: auto !important;
+}
+html.ui-mobile { scroll-behavior: auto !important; }
+
+/* Kính mờ / đổ bóng lớn là 2 thứ nặng nhất trên GPU di động */
+html.ui-mobile *,
+html.ui-mobile *::before,
+html.ui-mobile *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+html.ui-mobile .card,
+html.ui-mobile .list-item,
+html.ui-mobile .panel,
+html.ui-mobile .modal-box,
+html.ui-mobile .login-card,
+html.ui-mobile nav,
+html.ui-mobile .topbar,
+html.ui-mobile .sidebar {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .10) !important;
+}
+/* Nền động/gradient chuyển màu chạy nền: đứng yên */
+html.ui-mobile body::before,
+html.ui-mobile body::after { animation: none !important; }
+
+/* NGOẠI LỆ: spinner PHẢI được xoay, nếu không người dùng tưởng treo máy */
+html.ui-mobile .gpl-spinner span,
+html.ui-mobile .ui-spin,
+html.ui-mobile .ui-spin::after,
+html.ui-mobile .ui-progress-ring circle {
+  animation-duration: .8s !important;
+  animation-iteration-count: infinite !important;
+}
+
+/* ---------------------------------------------------------
+   2) KHUNG TRANG — chống tràn ngang (lỗi hiển thị hay gặp nhất)
+--------------------------------------------------------- */
+html.ui-mobile, html.ui-mobile body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+html.ui-mobile img,
+html.ui-mobile video,
+html.ui-mobile canvas,
+html.ui-mobile iframe,
+html.ui-mobile svg:not(.ui-progress-ring) {
+  max-width: 100% !important;
+  height: auto;
+}
+html.ui-mobile pre,
+html.ui-mobile code { white-space: pre-wrap; word-break: break-word; }
+html.ui-mobile .title,
+html.ui-mobile .sub,
+html.ui-mobile h1, html.ui-mobile h2, html.ui-mobile h3 {
+  overflow-wrap: anywhere;
+}
+
+/* Bảng: không bóp méo, cho cuộn ngang trong khung riêng
+   (mobile-ui.js tự bọc mỗi <table> vào .ui-tablewrap) */
+html.ui-mobile .ui-tablewrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+html.ui-mobile .ui-tablewrap > table { min-width: 520px; }
+
+/* ---------------------------------------------------------
+   3) THU GỌN KHOẢNG CÁCH — lấy lại diện tích màn hình nhỏ
+--------------------------------------------------------- */
+html.ui-mobile .content,
+html.ui-mobile .wrap,
+html.ui-mobile .wrap-narrow,
+html.ui-mobile .home-wrap,
+html.ui-mobile .grid-section,
+html.ui-mobile .filters-section,
+html.ui-mobile .detail-view,
+html.ui-mobile .admin-panel,
+html.ui-mobile .section {
+  max-width: 100% !important;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+}
+html.ui-mobile .card,
+html.ui-mobile .panel,
+html.ui-mobile .box { padding: 14px !important; border-radius: 14px !important; }
+html.ui-mobile .card + .card,
+html.ui-mobile .panel + .panel { margin-top: 10px !important; }
+
+/* ---------------------------------------------------------
+   4) VÙNG CHẠM & Ô NHẬP LIỆU
+   font-size >= 16px để iOS/Safari không tự phóng to trang khi gõ.
+--------------------------------------------------------- */
+html.ui-mobile button,
+html.ui-mobile .btn,
+html.ui-mobile .nav-item,
+html.ui-mobile [role="button"] {
+  min-height: 44px;
+  touch-action: manipulation;
+}
+html.ui-mobile .btn-sm { min-height: 36px; }
+html.ui-mobile input,
+html.ui-mobile select,
+html.ui-mobile textarea {
+  font-size: 16px !important;
+  max-width: 100%;
+}
+
+/* ---------------------------------------------------------
+   5) XẾP LẠI HÀNG NGANG THÀNH CỘT DỌC
+   Chỉ áp cho các cụm hành động/hàng danh sách đã biết tên class,
+   không đụng tới lưới lịch (7-8 cột) hay lưới auto-fill.
+--------------------------------------------------------- */
+@media (max-width: 640px) {
+  html.ui-mobile .list-item {
+    flex-wrap: wrap !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+  }
+  html.ui-mobile .list-item .info { flex: 1 1 100%; min-width: 0; }
+  html.ui-mobile .list-item .actions {
+    flex: 1 1 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  html.ui-mobile .list-item .actions .btn { flex: 1 1 auto; }
+
+  html.ui-mobile .row,
+  html.ui-mobile .form-row,
+  html.ui-mobile .toolbar,
+  html.ui-mobile .filters { flex-direction: column !important; align-items: stretch !important; }
+  html.ui-mobile .row > *,
+  html.ui-mobile .form-row > * { width: 100% !important; }
+}
+
+/* Thanh công cụ soạn thảo: cuộn ngang thay vì vỡ hàng */
+html.ui-mobile .rte-toolbar,
+html.ui-mobile .editor-toolbar {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+html.ui-mobile .rte-toolbar > *,
+html.ui-mobile .editor-toolbar > * { flex: 0 0 auto; }
+
+/* ---------------------------------------------------------
+   6) HỘP THOẠI / MODAL — tràn hết bề ngang, cuộn được
+--------------------------------------------------------- */
+html.ui-mobile .modal-box,
+html.ui-mobile .login-card {
+  max-width: calc(100vw - 24px) !important;
+  width: calc(100vw - 24px) !important;
+  max-height: 88vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Các panel thả xuống dùng position:fixed (gợi ý tìm kiếm...) có bề ngang
+   cố định 520px do JS tính theo ô tìm kiếm trên máy tính. Trên màn hẹp,
+   giới hạn lại theo bề ngang màn hình để không bao giờ nhô khỏi mép phải. */
+html.ui-mobile .search-suggest-panel,
+html.ui-mobile .suggest-panel {
+  max-width: calc(100vw - 16px) !important;
+  left: 8px !important;
+}
+
+/* Thanh điều hướng trên cùng: trên điện thoại, tên site dài làm chữ xuống
+   3 dòng và đè lên nội dung bên dưới (nav có chiều cao cố định 56px).
+   Giữ lại biểu tượng, ẩn phần chữ — vốn đã có ở giữa trang. */
+html.ui-phone .nav-logo > span:not(.logo-emoji) { display: none !important; }
+html.ui-mobile .nav-logo {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  min-width: 0;
+}
+html.ui-mobile .nav-logo, html.ui-mobile .admin-badge { overflow: hidden; }
+
+/* ---------------------------------------------------------
+   7) SPINNER / CIRCULAR PROGRESS dùng chung
+   Dùng lại đúng tông màu spinner sẵn có của site (#ec1561 / #fbd7e4)
+   nên nhìn đồng bộ với "Đang tải trang..." lúc mở web.
+   Phần này KHÔNG giới hạn trong ui-mobile — laptop cũng cần spinner,
+   nhưng nó chỉ hiện khi JS chủ động gọi nên không đổi UI sẵn có.
+--------------------------------------------------------- */
+.ui-spin {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(236, 21, 97, .25);
+  border-top-color: #ec1561;
+  border-right-color: #ec1561;
+  animation: ui-spin-kf .8s linear infinite;
+  vertical-align: -3px;
+  flex: 0 0 auto;
+}
+.ui-spin.ui-spin-lg { width: 34px; height: 34px; border-width: 3px; }
+.ui-spin.ui-spin-on-dark {
+  border-color: rgba(255, 255, 255, .35);
+  border-top-color: #fff;
+  border-right-color: #fff;
+}
+@keyframes ui-spin-kf { to { transform: rotate(360deg); } }
+
+/* Nút đang chờ: khoá bấm lại, chèn spinner trước nhãn */
+.ui-busy {
+  position: relative;
+  pointer-events: none;
+  opacity: .72;
+}
+.ui-busy > .ui-spin { margin-right: 6px; }
+
+/* Lớp phủ chờ cho 1 vùng nội dung (danh sách, bảng, khung) */
+.ui-block-loading { position: relative; min-height: 96px; }
+.ui-block-loading > .ui-block-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, .82);
+  border-radius: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b6480;
+}
+
+/* Vòng tiến trình ở góc màn hình khi có request đang chạy nền */
+#ui-net-progress {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  z-index: 99998;
+  width: 38px;
+  height: 38px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .18);
+}
+#ui-net-progress.on { display: flex; }
+.ui-progress-ring { width: 24px; height: 24px; transform: rotate(-90deg); }
+.ui-progress-ring circle {
+  fill: none;
+  stroke: #ec1561;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 60;
+  stroke-dashoffset: 42;
+  animation: ui-spin-kf 1s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+/* Trên mobile đặt vòng tiến trình cao hơn để không đè thanh điều hướng dưới */
+html.ui-mobile #ui-net-progress { bottom: 76px; right: 12px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-spin, .ui-progress-ring circle { animation-duration: 1.6s !important; }
+}

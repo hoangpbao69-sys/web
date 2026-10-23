@@ -1,0 +1,118 @@
+/* =========================================================
+   movie-mobile-ui.css — UI rút gọn cho MOBILE / TABLET
+   ---------------------------------------------------------
+   Chỉ có tác dụng khi <html> có class "mv-mobile" (gắn bởi
+   movie-mobile-ui.js, dựa vào phát hiện thiết bị thật — không
+   chỉ dựa vào bề rộng cửa sổ). Trên laptop: không class -> không
+   một dòng nào ở đây được áp dụng -> giao diện laptop giữ nguyên.
+   ========================================================= */
+
+/* ---------- 1) Bớt hiệu ứng để đỡ giật trên máy yếu ---------- */
+html.mv-mobile *, html.mv-mobile *::before, html.mv-mobile *::after {
+  animation-duration: .01ms !important;
+  transition-duration: .01ms !important;
+}
+html.mv-mobile .skel,
+html.mv-mobile .gate-spinner span {
+  animation-duration: 1.2s !important;
+  animation-iteration-count: infinite !important;
+}
+html.mv-mobile .card:hover .poster,
+html.mv-mobile .card:hover .badge,
+html.mv-mobile .statcard:hover { transform: none !important; box-shadow: var(--shadow) !important; }
+html.mv-mobile header,
+html.mv-mobile .gate-box,
+html.mv-mobile .hc-badge { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+/* ---------- 2) Ép menu thu gọn (hamburger) dù màn hình có rộng
+   hơn ngưỡng CSS thường (ví dụ iPad ngang) — vì đây là thiết bị
+   cảm ứng thật, không phải cửa sổ desktop bị thu hẹp. ---------- */
+html.mv-mobile .menu-btn { display: inline-flex !important; }
+html.mv-mobile .head nav,
+html.mv-mobile .head #nav,
+html.mv-mobile .head #mainNav {
+  display: none !important;
+  position: absolute; top: 70px; left: 0; right: 0;
+  flex-direction: column; align-items: stretch;
+  background: var(--surface); border-bottom: 1px solid var(--line);
+  padding: 10px 16px; max-height: calc(100vh - 70px); overflow: auto;
+  box-shadow: var(--shadow); z-index: 30;
+}
+html.mv-mobile .head nav.open,
+html.mv-mobile .head #nav.open,
+html.mv-mobile .head #mainNav.open { display: flex !important; }
+html.mv-mobile .dd-menu { position: static; box-shadow: none; border: 0; padding: 0 0 6px 10px; min-width: 0; }
+html.mv-mobile .dd-menu.cols { min-width: 0; grid-template-columns: 1fr 1fr; }
+html.mv-mobile .only-m { display: block !important; }
+html.mv-mobile .theme { display: none !important; }
+html.mv-mobile .hsearch { flex: 1; min-width: 0; }
+html.mv-mobile .hsearch input { width: 100%; min-width: 0; }
+html.mv-mobile #configBtn, html.mv-mobile .acct-name { display: none !important; }
+
+/* ---------- 3) Khung trang gọn lại ---------- */
+html.mv-mobile .wrap { width: min(100% - 24px, 1180px) !important; }
+html.mv-phone .head { gap: 8px; }
+html.mv-phone .brand { font-size: 16px; }
+html.mv-phone .section { padding: 26px 0 !important; }
+html.mv-phone .hero.slim { padding: 24px 0 18px !important; }
+html.mv-phone .section-head { margin-bottom: 16px !important; }
+html.mv-phone .section h2 { font-size: 20px !important; }
+html.mv-phone .admin-top h1, html.mv-phone .topline h1 { font-size: 26px !important; }
+html.mv-mobile footer { padding-bottom: 28px !important; }
+
+/* ---------- 4) Poster đầu trang: gọn theo chiều dọc, xếp chồng ---------- */
+html.mv-mobile .hc-inner {
+  flex-direction: column; align-items: flex-start;
+  padding: 22px 0 18px; min-height: 0; gap: 12px;
+}
+html.mv-mobile .hc-slide { min-height: 0; }
+html.mv-mobile .hc-poster { width: 92px; box-shadow: 0 12px 26px -12px rgba(0,0,0,.6); }
+html.mv-mobile .hc-info { max-width: 100%; }
+html.mv-mobile .hc-desc { -webkit-line-clamp: 2; font-size: 12.5px; margin-bottom: 14px; }
+html.mv-mobile .hc-sub { font-size: 12.5px; margin-bottom: 10px; }
+html.mv-mobile .hc-badges { margin-bottom: 10px; }
+html.mv-mobile .hc-nav { opacity: 1 !important; width: 34px; height: 34px; }
+html.mv-phone .hc-nav.prev { left: 8px; } html.mv-phone .hc-nav.next { right: 8px; }
+html.mv-mobile .hc-dots { bottom: 10px; }
+
+/* ---------- 5) Lưới phim: cố định số cột cho gọn ---------- */
+html.mv-phone .grid { grid-template-columns: repeat(2, 1fr) !important; gap: 14px 10px !important; }
+html.mv-tablet .grid { grid-template-columns: repeat(3, 1fr) !important; gap: 18px 14px !important; }
+html.mv-mobile .statcards { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; margin-top: 22px !important; }
+html.mv-phone .statcard { padding: 12px 14px !important; }
+html.mv-phone .statcard b { font-size: 19px !important; }
+html.mv-mobile .eps { grid-template-columns: repeat(4, 1fr) !important; }
+
+/* ---------- 6) Trang phim / trình phát ---------- */
+html.mv-mobile .film-top { grid-template-columns: 1fr !important; gap: 14px !important; margin: 14px 0 18px !important; }
+html.mv-mobile .film-top .poster { width: 128px !important; }
+html.mv-mobile .film-top h1 { font-size: 24px !important; }
+html.mv-mobile .facts { grid-template-columns: 84px 1fr !important; }
+html.mv-mobile .watch-bar { flex-direction: column; align-items: stretch !important; }
+html.mv-mobile .watch-actions { justify-content: space-between; }
+html.mv-mobile .actions-row .btn { flex: 1 1 auto; justify-content: center; }
+
+/* ---------- 7) Form & bảng quản trị: 1 cột, bảng cuộn ngang ---------- */
+html.mv-mobile .admin-layout,
+html.mv-mobile .admin-layout.wide,
+html.mv-mobile .form-grid,
+html.mv-mobile .acct-grid,
+html.mv-mobile .grid2 { grid-template-columns: 1fr !important; }
+html.mv-mobile .field.full { grid-column: auto !important; }
+html.mv-mobile .admin-row { grid-template-columns: 44px 1fr !important; }
+html.mv-mobile .admin-row .row-actions { grid-column: 1/-1; justify-content: flex-start; }
+html.mv-mobile .mv-tablewrap { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+html.mv-mobile .mv-tablewrap > table { min-width: 560px; }
+
+/* ---------- 8) Vùng chạm & ô nhập liệu ---------- */
+html.mv-mobile .btn { min-height: 42px; }
+html.mv-mobile .iconbtn:not(.menu-btn) { width: 42px; height: 42px; }
+html.mv-mobile input, html.mv-mobile select, html.mv-mobile textarea { font-size: 16px !important; max-width: 100%; }
+
+/* ---------- 9) Toast & modal tràn gần hết bề ngang ---------- */
+html.mv-mobile #toasts { left: 10px; right: 10px; }
+html.mv-mobile .toast { max-width: none; }
+html.mv-mobile .login { margin: 40px auto !important; max-width: calc(100vw - 40px) !important; }
+
+/* Gate đăng nhập (movie-auth.js): thu nhỏ khung một chút trên điện thoại */
+html.mv-phone .gate-box { width: min(360px, 92vw) !important; padding: 24px 22px 22px !important; }

@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/nguonc-api/:path*", "destination": "https://phim.nguonc.com/api/:path*" },
+    { "source": "/phim/:slug", "destination": "/indexmovie.html" }
+  ]
+}

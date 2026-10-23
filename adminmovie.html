@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="/movie-mobile-ui.css">
+<script src="/movie-mobile-ui.js"></script>
+
+<title>Thư Viện Phim · Quản trị vận hành</title><link rel="icon" type="image/png" sizes="32x32" href="/movie-favicon-32.png"><link rel="icon" type="image/png" sizes="256x256" href="/movie-favicon-256.png"><link rel="apple-touch-icon" href="/movie-favicon-180.png"><meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Lora:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:oklch(97.6% .006 286);--surface:oklch(99.3% .003 286);--muted:oklch(94.8% .011 286);--ink:oklch(21% .032 286);--ink2:oklch(45% .022 286);--ink3:oklch(60% .016 286);--line:oklch(90.5% .012 286);--line2:oklch(85% .016 286);--primary:oklch(46% .168 286);--soft:oklch(94.5% .028 286);--ok:oklch(48% .09 168);--oksoft:oklch(94% .035 168);--warn:oklch(58% .13 62);--warnsoft:oklch(94.5% .045 78);--bad:oklch(52% .16 25);--badsoft:oklch(95% .035 25);--shadow:0 12px 40px -20px oklch(21% .03 286/.25)}
+[data-theme=dark]{--bg:oklch(15.5% .018 286);--surface:oklch(21.5% .023 286);--muted:oklch(19.5% .021 286);--ink:oklch(95% .008 286);--ink2:oklch(76% .014 286);--ink3:oklch(60% .018 286);--line:oklch(27% .022 286);--line2:oklch(34% .026 286);--primary:oklch(70% .125 286);--soft:oklch(28% .055 286);--ok:oklch(74% .1 168);--oksoft:oklch(26% .045 168);--warn:oklch(76% .115 72);--warnsoft:oklch(29% .05 68);--bad:oklch(70% .13 25);--badsoft:oklch(29% .045 25);--shadow:0 12px 40px -20px oklch(8% .01 286/.65)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.55 "Be Vietnam Pro",system-ui,sans-serif}a{color:inherit;text-decoration:none}button,input,select{font:inherit}button{cursor:pointer}.wrap{width:min(1240px,calc(100% - 40px));margin:auto}.serif{font-family:Lora,Georgia,serif}.muted{color:var(--ink3)}.eyebrow{font-size:11px;letter-spacing:.11em;text-transform:uppercase;font-weight:800;color:var(--ink3)}
+header{height:70px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;background:color-mix(in oklch,var(--bg) 92%,transparent);backdrop-filter:blur(10px)}.head{height:100%;display:flex;align-items:center;gap:22px}.brand{font:600 20px Lora,serif;white-space:nowrap}.brand b{color:var(--primary)}nav{display:flex;gap:3px}nav a{padding:9px 11px;border-radius:9px;color:var(--ink2);font-size:13px;font-weight:700;white-space:nowrap}nav{flex-wrap:wrap;row-gap:4px}nav a:hover,nav a.on{background:var(--soft);color:var(--primary)}.menu-btn{display:none;width:38px;height:38px;padding:0;align-items:center;justify-content:center}.actions{margin-left:auto;display:flex;align-items:center;gap:8px}#logoutBtn{white-space:nowrap}.theme{display:flex;padding:3px;border:1px solid var(--line);background:var(--muted);border-radius:999px}.theme button{border:0;background:transparent;border-radius:999px;padding:6px 9px;color:var(--ink3);font-size:12px}.theme button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 4px oklch(20% .02 286/.12)}.btn{border:1px solid var(--line2);border-radius:9px;background:var(--surface);color:var(--ink);padding:9px 12px;font-size:12px;font-weight:700}.btn.primary{background:var(--primary);color:var(--bg);border-color:var(--primary)}.btn.ok{background:var(--ok);color:var(--bg);border-color:var(--ok)}.btn.warn{background:var(--warn);color:var(--bg);border-color:var(--warn)}.btn.danger{color:var(--bad);border-color:color-mix(in oklch,var(--bad),transparent 55%)}.btn:hover{filter:brightness(1.06)}
+main{padding:38px 0 80px}.topline{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:26px}.topline h1{font:600 39px/1.08 Lora,serif;margin:8px 0}.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}.tab{border:1px solid var(--line2);background:var(--surface);color:var(--ink2);padding:9px 12px;border-radius:9px;font-size:12px;font-weight:700}.tab.active{background:var(--primary);color:var(--bg);border-color:var(--primary)}.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}.panel-head{padding:17px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:14px}.panel-head h2{font-size:15px}.panel-body{padding:20px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.metric{padding:17px;border:1px solid var(--line);border-radius:12px;background:var(--muted)}.metric b{display:block;font:600 29px Lora,serif}.metric span{font-size:11px;color:var(--ink3)}.metric.ok b{color:var(--ok)}.metric.warn b{color:var(--warn)}.metric.bad b{color:var(--bad)}
+.tablewrap{overflow:auto}.table{width:100%;border-collapse:collapse;font-size:12px}.table th{text-align:left;padding:11px 15px;border-bottom:1px solid var(--line);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);white-space:nowrap}.table td{padding:11px 15px;border-bottom:1px solid var(--line);color:var(--ink2);vertical-align:middle}.table tr:last-child td{border-bottom:0}.film{display:flex;align-items:center;gap:9px;min-width:230px}.h-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}.h-row:last-child{border-bottom:0}#h_results .h-row{padding:8px 0}.film img{width:30px;height:42px;object-fit:cover;border-radius:4px;background:var(--muted)}.film strong{color:var(--ink);font-size:12px}.pill{display:inline-block;padding:3px 7px;border-radius:5px;font-size:10px;font-weight:800}.pill.ok{background:var(--oksoft);color:var(--ok)}.pill.warn{background:var(--warnsoft);color:var(--warn)}.pill.bad{background:var(--badsoft);color:var(--bad)}.empty{padding:45px 20px;text-align:center;color:var(--ink3);font-size:13px}.note{padding:12px 14px;border-radius:10px;background:var(--soft);color:var(--ink2);font-size:12px;line-height:1.6;margin-bottom:14px}.field{display:grid;gap:6px;margin-top:13px}.field label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:var(--ink3)}.field input,.field select{width:100%;padding:10px 11px;border:1px solid var(--line2);border-radius:9px;background:var(--bg);color:var(--ink)}.field input:focus{outline:2px solid var(--primary);outline-offset:1px}.actionsrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.status{font-size:12px;min-height:19px;margin-top:10px}.status.ok{color:var(--ok)}.status.bad{color:var(--bad)}.code{margin:0;padding:15px;border-radius:10px;background:var(--bg);border:1px solid var(--line);font:12px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;overflow:auto;color:var(--ink2)}.user-cell{display:flex;align-items:center;gap:10px}.avatar{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--soft);color:var(--primary);font-weight:800;font-size:11px}.select{padding:6px 7px;border:1px solid var(--line2);border-radius:7px;background:var(--surface);color:var(--ink);font-size:11px}.rowbtn{border:1px solid var(--line2);background:var(--surface);color:var(--ink2);border-radius:7px;padding:6px 8px;font-size:11px}.rowbtn:hover{color:var(--primary);border-color:var(--primary)}.toggle{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink2)}.toggle input{accent-color:var(--primary)}footer{border-top:1px solid var(--line);padding:24px 0;color:var(--ink3);font-size:12px}
+@media(max-width:850px){.grid2{grid-template-columns:1fr}.grid3{grid-template-columns:1fr 1fr}.topline{align-items:start;flex-direction:column}.menu-btn{display:inline-flex}.head nav{display:none;position:absolute;top:70px;left:0;right:0;flex-direction:column;align-items:stretch;background:var(--surface);border-bottom:1px solid var(--line);padding:10px 16px;max-height:calc(100vh - 70px);overflow:auto;box-shadow:var(--shadow);z-index:30}.head nav.open{display:flex}.wrap{width:min(100% - 28px,1240px)}}@media(max-width:520px){.grid3{grid-template-columns:1fr}.actions{gap:4px}.theme button{padding:6px}.topline h1{font-size:32px}}
+
+.ic{display:inline-block;vertical-align:-3px;flex:none}
+.btn{display:inline-flex;align-items:center;gap:6px}
+.rowbtn{display:inline-flex;align-items:center;gap:4px}
+.theme button{display:inline-flex;align-items:center;gap:5px}
+nav a{display:inline-flex;align-items:center;gap:6px}
+.statcard,.metric{transition:transform .2s ease,box-shadow .2s ease}
+.metric:hover{transform:translateY(-2px)}
+
+/* ---- sửa lỗi menu: .btn ghi đè display của .menu-btn nên nút hamburger hiện cả trên laptop,
+   làm thanh menu bị xuống dòng. Chỉ hiện hamburger khi màn hình hẹp (<=1280px). ---- */
+.btn.menu-btn{display:none;width:38px;height:38px;padding:0;align-items:center;justify-content:center}
+nav{flex-wrap:nowrap}
+@media(max-width:1280px){
+  .btn.menu-btn{display:inline-flex}
+  .head nav{display:none;position:absolute;top:70px;left:0;right:0;flex-direction:column;align-items:stretch;background:var(--surface);border-bottom:1px solid var(--line);padding:10px 16px;max-height:calc(100vh - 70px);overflow:auto;box-shadow:var(--shadow);z-index:30}
+  .head nav.open{display:flex}
+}
+</style>
+</head>
+<body>
+<header><div class="wrap head"><a class="brand" href="#/">THƯ VIỆN<b> PHIM</b> <small style="font:600 10px system-ui;color:var(--ink3)">vận hành</small></a><button class="btn menu-btn" id="menuBtn" aria-label="Menu"></button><nav id="mainNav"><a href="#/links" data-nav="links">Link hỏng</a><a href="#/hero" data-nav="hero">Poster</a><a href="#/seo" data-nav="seo">SEO</a><a href="#/users" data-nav="users">Tài khoản & quyền</a><a href="#/guide" data-nav="guide">Hướng dẫn</a><a href="/indexmovie.html#/">Trang phim</a><a href="/analyticsmovie.html">Analytics</a><a href="/" id="navHome">Trang chủ chính</a></nav><div class="actions"><div class="theme"><button data-theme="light" class="on"></button><button data-theme="dark"></button></div><button class="btn" id="logoutBtn">Đăng xuất</button></div></div></header>
+<main class="wrap" id="app"></main><footer><div class="wrap">Thư Viện Phim · vận hành. Quyền truy cập cấp trong manage.html → Mã định danh (ô <span data-ic="film" style="display:inline-block;vertical-align:-3px"></span> Admin phim).</div></footer>
+<script src="/movie-icons.js"></script>
+<script src="/movie-auth.js"></script>
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));function fmt(n){return Number(n||0).toLocaleString('vi-VN')}
+let view='links';
+function theme(){let t=localStorage.getItem('tvp-v3-theme')||'light';document.documentElement.dataset.theme=t;document.querySelectorAll('.theme [data-theme]').forEach(b=>{b.classList.toggle('on',b.dataset.theme===t);b.onclick=()=>{t=b.dataset.theme;document.documentElement.dataset.theme=t;localStorage.setItem('tvp-v3-theme',t);document.querySelectorAll('.theme [data-theme]').forEach(x=>x.classList.toggle('on',x.dataset.theme===t))}})}
+
+async function route(){let h=location.hash.replace(/^#\/?/,'');view=h.split('/')[0]||'links';document.querySelectorAll('[data-nav]').forEach(a=>a.classList.toggle('on',a.dataset.nav===view));view==='guide'?guide():view==='seo'?seo():view==='users'?users():view==='hero'?hero():links()}
+function shell(title,kicker,actions=''){return `<div class="topline"><div><span class="eyebrow">${kicker}</span><h1>${title}</h1></div><div>${actions}</div></div>`}
+
+/* ---- nguonc API (chỉ để tìm phim đăng poster) ---- */
+const API_DIRECT='https://phim.nguonc.com/api', API_PROXY='/nguonc-api';
+async function fetchJson(url){const r=await fetch(url,{headers:{Accept:'application/json'}});if(!r.ok)throw Error('API '+r.status);return r.json()}
+async function ncApi(path){let err;for(const b of location.protocol==='file:'?[API_DIRECT]:[API_DIRECT,API_PROXY]){try{return await fetchJson(b+path)}catch(e){err=e}}throw err}
+function safeUrl(u){u=String(u||'').trim();if(!u)return '';if(u.startsWith('//'))u='https:'+u;try{const x=new URL(u);return /^https?:$/.test(x.protocol)?x.href:''}catch{return ''}}
+function imgUrl(u){u=String(u||'').trim();if(!u)return '';if(u.startsWith('//'))return 'https:'+u;if(u.startsWith('/'))return 'https://phim.nguonc.com'+u;return safeUrl(u)}
+function normFilmBasic(m){const groups={};for(const g of Object.values(m.category||{}))groups[(g.group?.name||'').toLowerCase()]=(g.list||[]).map(x=>x.name);const lang=(groups['ngôn ngữ']||groups['ngon ngu']||[])[0]||m.language||'';return{slug:m.slug,name:m.name,original_name:m.original_name||'',poster_url:m.poster_url||'',thumb_url:m.thumb_url||'',current_episode:m.current_episode||'',description:m.description||'',language:lang}}
+
+async function links(){
+  app.innerHTML=shell('Link hỏng','Thư Viện Phim · vận hành',`<button class="btn" id="addLink">${Icon('plus','',16)}Thêm link</button> <button class="btn primary" id="scan">${Icon('refresh','',16)}Quét tất cả</button>`)
+  +`<div class="note">Báo lỗi từ người xem hiện ở đây. Bấm <b>Kiểm tra</b>/<b>Quét tất cả</b> để Edge Function <code>check-broken-links</code> tự thử tải link (xem tab Hướng dẫn để bật). Không có Edge Function thì dùng nút <b>OK / Hỏng</b> để đánh dấu tay.</div>
+  <div class="grid3"><div class="metric ok"><b id="ok">–</b><span>Link đang tốt</span></div><div class="metric warn"><b id="warn">–</b><span>Chưa kiểm tra / cần quét</span></div><div class="metric bad"><b id="bad">–</b><span>Link hỏng</span></div></div>
+  <section class="panel" id="addPanel" style="margin-top:18px;display:none"><div class="panel-head"><h2>Thêm link cần theo dõi</h2></div><div class="panel-body"><form id="addForm"><div class="grid2">
+    <div class="field"><label>Slug phim</label><input id="l_slug" required></div><div class="field"><label>Tên phim</label><input id="l_name"></div>
+    <div class="field"><label>Tập</label><input id="l_ep" required placeholder="1 / FULL"></div><div class="field"><label>Loại</label><select id="l_kind" class="select"><option>embed</option><option>m3u8</option><option>poster</option><option>thumb</option><option>other</option></select></div>
+    <div class="field" style="grid-column:1/-1"><label>URL</label><input id="l_url" type="url" required></div></div>
+    <div class="actionsrow"><button class="btn primary" type="submit">${Icon('check',null,16)}Lưu link</button></div><div class="status" id="l_status"></div></form></div></section>
+  <section class="panel" style="margin-top:18px"><div class="panel-head"><h2>Danh sách link cần xử lý</h2><div style="display:flex;gap:8px;flex-wrap:wrap"><select class="select" id="fStatus"><option value="">Tất cả</option><option value="broken">Hỏng</option><option value="unknown">Chưa biết</option><option value="ok">OK</option></select><input id="fQ" class="select" placeholder="Lọc theo phim/URL" style="min-width:170px"></div></div><div class="tablewrap"><table class="table"><thead><tr><th>Phim</th><th>Loại</th><th>URL / tập</th><th>Trạng thái</th><th>Cập nhật</th><th></th></tr></thead><tbody id="linkRows"><tr><td colspan="6"><div class="empty">Đang tải...</div></td></tr></tbody></table></div></section>`;
+  $('#scan').onclick=scanLinks;$('#fStatus').onchange=renderLinks;$('#fQ').oninput=renderLinks;
+  $('#addLink').onclick=()=>{const p=$('#addPanel');p.style.display=p.style.display==='none'?'':'none'};
+  $('#addForm').onsubmit=async e=>{e.preventDefault();const st=$('#l_status');
+    const r=await MV.rpc('movie_admin_link_add',{p:{film_slug:$('#l_slug').value.trim(),film_name:$('#l_name').value.trim(),episode:$('#l_ep').value.trim(),kind:$('#l_kind').value,url:$('#l_url').value.trim()}});
+    if(r.error){st.className='status bad';st.textContent=r.error.code==='23505'?'Link này đã có trong danh sách.':r.error.message;return}
+    st.className='status ok';st.textContent='Đã thêm.';e.target.reset();loadLinks()};
+  loadLinks()
+}
+let linkData=[];
+async function loadLinks(){
+  let r=await MV.rpc('movie_admin_links_list');
+  if(r.error){linkData=[];$('#linkRows').innerHTML=`<tr><td colspan="6"><div class="empty">${esc(r.error.message)}<br>Đã chạy supabase.sql chưa?</div></td></tr>`;return}
+  linkData=r.data||[];renderLinks()}
+function renderLinks(){
+  const st=$('#fStatus')?.value||'',q=($('#fQ')?.value||'').toLowerCase();
+  const ok=linkData.filter(x=>x.status==='ok').length,bad=linkData.filter(x=>x.status==='broken').length;
+  $('#ok').textContent=fmt(ok);$('#bad').textContent=fmt(bad);$('#warn').textContent=fmt(linkData.length-ok-bad);
+  const d=linkData.filter(x=>(!st||x.status===st)&&(!q||(x.film_slug+' '+(x.film_name||'')+' '+x.url).toLowerCase().includes(q)));
+  const safe=u=>/^https?:\/\//i.test(u)?u:'#';
+  $('#linkRows').innerHTML=d.length?d.map(x=>`<tr><td><div class="film"><div><strong>${esc(x.film_name||x.film_slug)}</strong><div class="muted"><a href="/phim/${encodeURIComponent(x.film_slug)}" target="_blank" rel="noopener">${esc(x.film_slug)}</a></div></div></div></td><td>${esc(x.kind||'embed')}</td><td><div style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(x.url)}"><a href="${esc(safe(x.url))}" target="_blank" rel="noopener noreferrer">${esc(x.url)}</a></div><div class="muted">Tập ${esc(x.episode||'–')}${x.http_status?' · HTTP '+esc(x.http_status):''}${x.error?' · '+esc(x.error):''}</div></td><td><span class="pill ${x.status==='ok'?'ok':x.status==='broken'?'bad':'warn'}">${x.status==='ok'?'OK':x.status==='broken'?'HỎNG':'CHƯA BIẾT'}</span></td><td>${x.last_checked_at?new Date(x.last_checked_at).toLocaleString('vi-VN'):'–'}</td><td style="white-space:nowrap"><button class="rowbtn" data-chk="${x.id}">Kiểm tra</button> <button class="rowbtn" data-set="${x.id}:ok">OK</button> <button class="rowbtn" data-set="${x.id}:broken">Hỏng</button> <button class="rowbtn" data-del="${x.id}">Xoá</button></td></tr>`).join(''):'<tr><td colspan="6"><div class="empty">Không có link phù hợp.</div></td></tr>';
+  document.querySelectorAll('[data-chk]').forEach(b=>b.onclick=()=>checkOne(+b.dataset.chk,b));
+  document.querySelectorAll('[data-set]').forEach(b=>b.onclick=()=>{const[i,s]=b.dataset.set.split(':');markLink(+i,s)});
+  document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>delLink(+b.dataset.del))
+}
+async function markLink(id,status){const r=await MV.rpc('movie_admin_link_mark',{p_id:id,p_status:status});r.error?alert(r.error.message):loadLinks()}
+async function delLink(id){if(!confirm('Xoá bản ghi link này?'))return;const r=await MV.rpc('movie_admin_link_delete',{p_id:id});r.error?alert(r.error.message):loadLinks()}
+async function callChecker(body){const r=await MV.sb.functions.invoke('check-broken-links',{body:Object.assign({name:MV.user.name,code:MV.user.code},body)});
+  if(r.error){const st=r.error.context&&r.error.context.status;throw Error(st===404?'Chưa deploy Edge Function "check-broken-links". Xem tab Hướng dẫn.':r.error.message)}return r.data}
+async function scanLinks(){const b=$('#scan');b.disabled=true;b.textContent='Đang quét…';
+  try{const d=await callChecker({limit:100});alert(`Đã quét ${d.checked} link: ${d.ok} tốt, ${d.broken} hỏng.`);await loadLinks()}catch(e){alert(e.message)}finally{b.disabled=false;b.innerHTML=Icon('refresh',null,16)+'Quét tất cả'}}
+async function checkOne(id,btn){btn.disabled=true;const t=btn.textContent;btn.textContent='…';
+  try{await callChecker({id});await loadLinks()}catch(e){alert(e.message);btn.disabled=false;btn.textContent=t}}
+function seo(){app.innerHTML=shell('SEO phim','Thư Viện Phim · sitemap + schema',`<button class="btn primary" id="exportSitemap">Tải sitemap.xml</button> <button class="btn" id="exportSchema">Tải schema.json</button>`)+`<div class="grid2"><section class="panel"><div class="panel-head"><h2>Sitemap generator</h2><span class="muted">URL phim</span></div><div class="panel-body"><div class="field"><label>Domain production</label><input id="domain" placeholder="https://your-domain.vercel.app"></div><div class="field"><label>Số phim lấy từ Supabase</label><input id="limit" type="number" value="5000"></div><div class="actionsrow"><button class="btn primary" id="makeSitemap">Tạo preview</button></div><div class="status" id="seoStatus"></div><pre class="code" id="sitemapPreview" style="margin-top:14px;max-height:340px">Chưa tạo preview.</pre></div></section><section class="panel"><div class="panel-head"><h2>Movie / TVSeries schema</h2><span class="muted">JSON-LD theo từng phim</span></div><div class="panel-body"><div class="note">Trang phim nên render JSON-LD trong &lt;head&gt;. Schema này dùng tên, poster, mô tả, năm và link trang của bạn, không nhét link m3u8 vào schema.</div><pre class="code">&lt;script type="application/ld+json"&gt;
+{
+  "@context":"https://schema.org",
+  "@type":"TVSeries",
+  "name":"Tên phim",
+  "url":"https://domain/phim/slug",
+  "image":"poster_url",
+  "description":"...",
+  "dateCreated":"2026"
+}
+&lt;/script&gt;</pre><div class="actionsrow"><button class="btn primary" id="schemaExample">Tạo schema mẫu</button></div><pre class="code" id="schemaPreview" style="margin-top:14px">Chưa tạo schema.</pre></div></section></div><section class="panel" style="margin-top:18px"><div class="panel-head"><h2>Checklist SEO</h2></div><div class="panel-body"><label class="toggle"><input type="checkbox"> Canonical URL mỗi phim</label><br><label class="toggle"><input type="checkbox"> JSON-LD TVSeries / Movie</label><br><label class="toggle"><input type="checkbox"> sitemap.xml tự động mỗi ngày</label><br><label class="toggle"><input type="checkbox"> robots.txt cho phép crawler</label><br><label class="toggle"><input type="checkbox"> Open Graph title / image / description</label></div></section>`;$('#makeSitemap').onclick=makeSitemap;$('#exportSitemap').onclick=()=>download('sitemap.xml',makeSitemap(true));$('#schemaExample').onclick=()=>schemaPreview();$('#exportSchema').onclick=()=>download('schema.json',schemaPreview(true))}
+let seoFilms=[];async function getFilms(limit=5000){let r=await MV.sb.from('movie_films').select('slug,name,original_name,poster_url,description,year,total_episodes,updated_at').eq('is_published',true).order('updated_at',{ascending:false}).limit(limit);if(r.error)throw r.error;return r.data||[]}
+function makeSitemap(raw=false){let domain=($('#domain')?.value||location.origin).replace(/\/$/,'');return (async()=>{try{seoFilms=await getFilms(Number($('#limit')?.value||5000));let body=seoFilms.map(x=>`<url><loc>${domain}/phim/${esc(x.slug)}</loc><lastmod>${new Date(x.updated_at||Date.now()).toISOString()}</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>`).join('');let xml=`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${domain}/</loc><priority>1.0</priority></url>${body}</urlset>`;if(raw)return xml;$('#sitemapPreview').textContent=xml.slice(0,9000)+(xml.length>9000?'\n…':'');$('#seoStatus').textContent=`Đã tạo ${seoFilms.length} URL.`;$('#seoStatus').className='status ok';return xml}catch(e){if(!raw){$('#seoStatus').textContent=e.message;$('#seoStatus').className='status bad'}return ''}})()}
+function schemaFor(x){return {'@context':'https://schema.org','@type':x.total_episodes&&x.total_episodes>1?'TVSeries':'Movie',name:x.name,alternateName:x.original_name||undefined,url:(($('#domain')?.value||location.origin).replace(/\/$/,'')+'/phim/'+x.slug),image:x.poster_url||undefined,description:(x.description||'').replace(/<[^>]*>/g,'').slice(0,500),dateCreated:x.year?String(x.year):undefined};}function schemaPreview(raw=false){return (async()=>{seoFilms=seoFilms.length?seoFilms:await getFilms(100);let out=seoFilms.map(schemaFor);let text=JSON.stringify(out,null,2);if(!raw)$('#schemaPreview').textContent=text.slice(0,9000)+(text.length>9000?'\n…':'');return text})()}
+function download(name,data){Promise.resolve(data).then(text=>{let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:name.endsWith('.xml')?'application/xml':'application/json'}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)})}
+
+function users(){app.innerHTML=shell('Tài khoản và quyền','Thư Viện Phim · access control')+`<section class="panel"><div class="panel-head"><h2>Cấp quyền bằng Mã định danh</h2></div><div class="panel-body"><div class="note">Thư Viện Phim dùng chung hệ <b>Tên + Mã định danh</b> với web Thư Viện Bài Soạn. Mọi người có mã định danh còn hiệu lực đều xem được phim. Chỉ tài khoản được bật ô <b>${Icon('film',null,14)} Admin phim</b> mới vào được trang này, <b>analyticsmovie.html</b> và mục Quản trị của trang phim.</div><ol style="line-height:1.9"><li>Mở <b>manage.html ${Icon('chevronRight',null,13)} ${Icon('idcard',null,14)} Mã định danh</b>.</li><li>Tạo mã mới (hoặc bấm ${Icon('edit',null,14)} Sửa ở dòng có sẵn) và tick <b>${Icon('film',null,14)} Cho phép truy cập trang admin/analytics phim</b>.</li><li>Người đó đăng xuất rồi đăng nhập lại để nhận quyền. Thu hồi mã là mất quyền ngay.</li></ol><div class="actionsrow"><a class="btn primary" href="/manage.html">Mở manage.html</a></div><p class="muted" style="margin-top:14px">Đang đăng nhập: <b>${esc(MV.user.name)}</b></p></div></section>`}
+function guide(){app.innerHTML=shell('Hướng dẫn vận hành','Thư Viện Phim · setup')+`<div class="panel"><div class="panel-body"><h2>1. SQL Supabase</h2><p>Mở file <b>supabase.sql</b>, copy toàn bộ, dán vào Supabase ${Icon('chevronRight',null,13)} SQL Editor ${Icon('chevronRight',null,13)} Run. Chạy 1 lần là đủ (chạy lại cũng an toàn). File này thêm cột <code>can_access_movie_admin</code> cho bảng <code>user_identities</code>.</p>
+<h2 style="margin-top:26px">2. Cấp quyền admin phim</h2><p>manage.html ${Icon('chevronRight',null,13)} ${Icon('idcard',null,14)} Mã định danh ${Icon('chevronRight',null,13)} tick <b>${Icon('film',null,14)} Cho phép truy cập trang admin/analytics phim</b>.</p>
+<h2 style="margin-top:26px">3. Edge Function quét link hỏng (tuỳ chọn)</h2><ol><li>Supabase Dashboard ${Icon('chevronRight',null,13)} <b>Edge Functions</b> ${Icon('chevronRight',null,13)} <b>Deploy a new function</b> ${Icon('chevronRight',null,13)} đặt tên đúng <code>check-broken-links</code>.</li><li>Dán nội dung file <code>supabase/functions/check-broken-links/index.ts</code> ${Icon('chevronRight',null,13)} Deploy. Giữ bật “Verify JWT”.</li><li>Tab <b>Link hỏng</b> ${Icon('chevronRight',null,13)} <b>Quét tất cả</b> hoặc <b>Kiểm tra</b> từng dòng. Function tự lấy link từ bảng <code>movie_episodes</code> và <code>movie_broken_links</code>, thử tải và ghi trạng thái.</li></ol>
+<h2 style="margin-top:26px">4. SEO</h2><ol><li>Tab <b>SEO</b> ${Icon('chevronRight',null,13)} nhập domain ${Icon('chevronRight',null,13)} <b>Tải sitemap.xml</b> ${Icon('chevronRight',null,13)} bỏ vào thư mục dự án cạnh index.html ${Icon('chevronRight',null,13)} deploy lại.</li><li>Thêm dòng <code>Sitemap: https://domain/sitemap.xml</code> vào robots.txt, rồi gửi sitemap trong Google Search Console.</li><li>Trang phim đã tự chèn JSON-LD, canonical, og:title/description/image.</li></ol>
+<h2 style="margin-top:26px">Ghi chú</h2><ul><li><b>Link hỏng</b>: người xem bấm “Báo lỗi” ở trang phim ${Icon('chevronRight',null,13)} xuất hiện ở đây với trạng thái HỎNG.</li><li><b>Poster</b>: tìm phim rồi thêm làm banner đầu trang phim, tự trượt sau 5 giây, bấm vào poster mở luôn phim đó.</li><li>Đừng đưa service_role key vào HTML.</li></ul></div></div>`}
+
+/* ---- Poster (hero slides) ---- */
+async function hero(){
+  app.innerHTML=shell('Poster đầu trang','Thư Viện Phim · vận hành')
+  +`<div class="note">Tìm phim (lấy trực tiếp từ nguonc, không cần có sẵn trong Catalog Supabase) rồi thêm làm poster. Đăng bao nhiêu phim cũng được — trang phim sẽ tự trượt qua từng poster mỗi 5 giây, bấm vào poster hoặc nút "Xem ngay" để mở thẳng phim đó.</div>
+  <div class="grid2" style="align-items:start">
+    <section class="panel"><div class="panel-head"><h2>Tìm phim để thêm</h2></div><div class="panel-body">
+      <div class="field" style="margin-top:0"><label>Từ khoá</label><div class="actionsrow" style="margin-top:6px"><input id="h_q" placeholder="Tên phim..." style="flex:1"><button class="btn primary" id="h_search" type="button">${Icon('search',null,15)}Tìm</button></div></div>
+      <div id="h_results" style="margin-top:14px"></div>
+    </div></section>
+    <section class="panel"><div class="panel-head"><h2>Đang hiển thị</h2><span class="muted" id="h_count">–</span></div><div id="h_list"><div class="empty">Đang tải...</div></div></section>
+  </div>`;
+  $('#h_search').onclick=heroSearch;
+  $('#h_q').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();heroSearch()}};
+  loadHeroList();
+}
+async function heroSearch(){
+  const q=$('#h_q').value.trim(),box=$('#h_results');
+  if(!q){box.innerHTML='';return}
+  box.innerHTML='<div class="empty">Đang tìm...</div>';
+  try{
+    const d=await ncApi('/films/search?keyword='+encodeURIComponent(q));
+    const items=(d&&(d.items||d.data?.items))||[];
+    if(!heroLoaded)await loadHeroList();
+    box.innerHTML=items.length?items.slice(0,12).map(m=>`<div class="h-row"><div class="film"><img src="${esc(imgUrl(m.thumb_url||m.poster_url))}" alt="" onerror="this.style.visibility='hidden'"><div><strong>${esc(m.name)}</strong><br><span class="muted" style="font-size:11px">${esc(m.slug)} · ${esc(m.current_episode||'')}</span></div></div>${heroHas(m.slug)?'<button class="rowbtn" type="button" disabled>Đã có poster</button>':`<button class="rowbtn" data-add="${esc(m.slug)}" type="button">${Icon('plus',null,13)}Thêm</button>`}</div>`).join(''):'<div class="empty">Không tìm thấy phim phù hợp.</div>';
+    box.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>heroAdd(b.dataset.add,b));
+  }catch(e){box.innerHTML=`<div class="empty">Không tìm được: ${esc(e.message)}</div>`}
+}
+async function heroAdd(slug,btn){
+  if(heroHas(slug)){btn.disabled=true;btn.textContent='Đã có poster';return}
+  const old=btn.textContent;btn.disabled=true;btn.textContent='Đang thêm...';
+  try{
+    const d=await ncApi('/film/'+encodeURIComponent(slug));
+    const m=normFilmBasic((d&&(d.movie||d.data?.movie))||{slug});
+    const r=await MV.rpc('movie_admin_hero_save',{p:{film_slug:m.slug,film_name:m.name||m.slug,original_name:m.original_name,poster_url:safeUrl(m.poster_url)||null,current_episode:m.current_episode,language:m.language,description:m.description,is_active:true}});
+    if(r.error)throw r.error;
+    btn.innerHTML=Icon('check',null,15)+'Đã thêm';
+    loadHeroList();
+  }catch(e){alert('Không thêm được: '+e.message);btn.disabled=false;btn.textContent=old}
+}
+let heroData=[],heroLoaded=false;
+function heroHas(slug){return heroData.some(x=>x.film_slug===slug)}
+async function loadHeroList(){
+  const r=await MV.rpc('movie_admin_hero_list');
+  if(r.error){$('#h_list').innerHTML=`<div class="empty">${esc(r.error.message)}<br>Đã chạy supabase.sql bản mới nhất chưa?</div>`;return}
+  heroData=r.data||[];heroLoaded=true;
+  $('#h_count').textContent=fmt(heroData.length)+' poster';
+  $('#h_list').innerHTML=heroData.length?heroData.map((s,i)=>`<div class="h-row"><div class="film"><img src="${esc(imgUrl(s.poster_url))}" alt="" onerror="this.style.visibility='hidden'"><div><strong>${esc(s.film_name)}</strong><br><span class="muted" style="font-size:11px">${esc(s.film_slug)}</span> <span class="pill ${s.is_active?'ok':'bad'}">${s.is_active?'Đang hiện':'Đã ẩn'}</span></div></div><div class="actionsrow" style="margin:0"><button class="rowbtn" data-up="${s.id}" ${i===0?'disabled':''} type="button">${Icon('arrowUp',null,15)}</button><button class="rowbtn" data-down="${s.id}" ${i===heroData.length-1?'disabled':''} type="button">${Icon('arrowDown',null,15)}</button><button class="rowbtn" data-tg="${s.id}:${!s.is_active}" type="button">${s.is_active?'Ẩn':'Hiện'}</button><button class="rowbtn" data-del="${s.id}" type="button">${Icon('trash',null,13)}Xoá</button></div></div>`).join(''):'<div class="empty">Chưa có poster nào. Tìm phim ở khung bên trái rồi bấm Thêm.</div>';
+  $('#h_list').querySelectorAll('[data-up]').forEach(b=>b.onclick=()=>heroMove(b.dataset.up,'up'));
+  $('#h_list').querySelectorAll('[data-down]').forEach(b=>b.onclick=()=>heroMove(b.dataset.down,'down'));
+  $('#h_list').querySelectorAll('[data-tg]').forEach(b=>b.onclick=()=>{const[id,val]=b.dataset.tg.split(':');heroToggle(id,val==='true')});
+  $('#h_list').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>heroDelete(b.dataset.del));
+}
+async function heroMove(id,dir){const r=await MV.rpc('movie_admin_hero_move',{p_id:id,p_dir:dir});r.error?alert(r.error.message):loadHeroList()}
+async function heroToggle(id,val){const r=await MV.rpc('movie_admin_hero_toggle',{p_id:id,p_val:val});r.error?alert(r.error.message):loadHeroList()}
+async function heroDelete(id){if(!confirm('Xoá poster này?'))return;const r=await MV.rpc('movie_admin_hero_delete',{p_id:id});r.error?alert(r.error.message):loadHeroList()}
+
+function paintIcons(){document.querySelectorAll('.theme button').forEach(b=>{const n=b.dataset.theme==='dark'?'moon':'sun';b.innerHTML=Icon(n,null,15)});$('#logoutBtn').innerHTML=Icon('logout',null,16)+'Đăng xuất';const nh=$('#navHome');if(nh)nh.innerHTML=Icon('home',null,16)+'Trang chủ chính';$('#menuBtn').innerHTML=Icon('menu',null,18);document.querySelectorAll('[data-ic]').forEach(e=>{e.innerHTML=Icon(e.dataset.ic,null,14)})}
+paintIcons();
+theme();$('#logoutBtn').onclick=()=>MV.logout();window.addEventListener('hashchange',()=>{closeNav();route()});
+$('#menuBtn').onclick=()=>$('#mainNav').classList.toggle('open');
+function closeNav(){$('#mainNav').classList.remove('open')}
+MV.init({page:'Admin phim',online:false,lock:false,requireAdmin:true}).then(()=>route());
+</script>
+</body></html>
